@@ -82,6 +82,7 @@
       class="mt-2"
       variant="success"
       size="lg"
+      :disabled="loading === true"
       @click="selectRandom()"
     >
         Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
@@ -117,10 +118,25 @@ export default {
       displayCustom: false,
       customName: '',
       error: null,
+      timeoutId: null,
       sentence: 'Hei, alle sammen og velkommen til stand up!',
+      introSentences: [
+        'Hei, alle sammen og velkommen til stænd up!',
+        'Hei der. Jeg er Sara! Hvem er med i dag, mon tro?',
+        'Tryllestav på veggen der, hvilke triks har du her?',
+        'Oi, oi oi! I dag var det mange flotte klesplagg!',
+        'Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.',
+        'Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!'
+      ],
+      loadingSentences: [
+        'La meg spinne tryllestaven min litt, så skal jeg finne ut av det!',
+        'Skal vi se! Jeg legger til litt her, trekker fra der. Ok, sånn!',
+        'Hmm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
+        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!',
+      ],
       loading: false,
-      voiceRate: 1.0,
-      pitch: 1.02,
+      voiceRate: 0.9,
+      pitch: 1.0,
       voice: 'Norwegian Female',
       turnTypes: [
         'direction',
@@ -131,8 +147,10 @@ export default {
     }
   },
   mounted () {
+    let selectedIntro = this.fisherYates(this.introSentences)[0]
+    this.sentence = selectedIntro
     window.setTimeout(() => {
-      window.responsiveVoice.speak('Hei, alle sammen og velkommen til stand up!', this.voice, { rate: this.voiceRate, pitch: this.pitch })
+      window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
     }, 1500)
   },
   computed: {
@@ -193,18 +211,21 @@ export default {
           sentence = `Bananas! Denne gangen starter vi med ${shuffled[0]} også velger ${shuffled[1]} hvem som er neste, hver gang! Spinnvilt, spør du meg.`
           break
         case 'backwards':
-          sentence = `Denne gangen starter vi med ${shuffled[0]} også går vi bakover! Det vil si ${shuffled.reverse().join(' så ')}. Litt rart, men slik ble det i dag.`
+          let reversed = shuffled
+          reversed = reversed.reverse()
+          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, men slik ble det i dag.`
           break
       }
 
-      this.sentence = `La meg spinne tryllestaven min litt, så skal jeg finne ut av det!`
+      let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
+      this.sentence = selectedLoadingSentence
       window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
 
       window.setTimeout(() => {
         this.sentence = sentence
         window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
         this.loading = false
-      }, 4500)
+      }, 7000)
     }
   }
 }
