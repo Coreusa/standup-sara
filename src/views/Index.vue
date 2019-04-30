@@ -137,7 +137,10 @@ export default {
   },
   computed: {
     participantsSorted () {
-      return this.participants.sort((a, b) => a.toLowerCase() > b.toLowerCase())
+      // Avoid some unexpected side-effects.
+      let temp = this.participants
+      temp = temp.sort((a, b) => a.toLowerCase() > b.toLowerCase())
+      return temp
     }
   },
   methods: {
