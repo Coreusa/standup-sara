@@ -144,7 +144,7 @@ export default {
         'Hmm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
         'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
         'Lottotrekning!',
-        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!',
+        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
       ],
       loading: false,
       voiceRate: 0.9,
