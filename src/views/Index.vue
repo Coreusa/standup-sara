@@ -1,109 +1,117 @@
-  <template>
-<div class="row no-gutters mx-auto">
-  <div class="col-12 mb-5">
-    <h1>
-    Velkommen til Stand-up Sara!
-    </h1>
-  </div>
-  <b-card class="col-12 col-md-5 bg-light text-left">
-    <h5>Hvem som er med i dag?</h5>
-      <b-btn
-        v-for="(p, i) in participantsSorted"
-        size="sm"
-        variant="primary"
-        class="mb-2 mr-2"
-        :key="`participant-${i}`"
-        @click="addUser(p, i)"
-      >
-        {{ p }}
-      </b-btn>
-    <div class="mt-3">
-      <b-btn
-        variant="dark"
-        size="sm"
-        @click="displayCustom = !displayCustom"
-      >
-        Egendefinert
-      </b-btn>
-      <b-input-group
-        v-if="displayCustom"
-        size="sm"
-        class="text-right mt-2"
-      >
-        <b-input
-          v-model="customName"
-          placeholder="Navn..."
-          :state="customName.length > 1"
-        >
-        </b-input>
-        <b-input-group-append>
-          <b-btn
-            variant="success"
-            @click="addCustomUser()"
-          >
-            Legg til
-          </b-btn>
-        </b-input-group-append>
-      </b-input-group>
-      <b-alert
-        :show="error"
-        size="sm"
-        variant="danger"
-      >
-        {{ error }}
-      </b-alert>
+<template>
+  <div>
+    <div class="row no-gutters mx-auto stand-up position-relative">
+    <div class="col-12 mb-5">
+      <h1>
+      Velkommen til Stand-up Sara!
+      </h1>
     </div>
-  </b-card>
-  <b-card class="col-12 col-md-5 offset-md-2 text-left">
-    <h5 v-if="selectedParticipants.length">Valgt</h5>
-      <font-awesome-icon
-        v-if="loading"
-        icon="circle-notch"
-        spin
-      >
-      </font-awesome-icon>
-      <div v-else>
+    <b-card class="col-12 col-md-5 bg-light text-left">
+      <h5>Hvem som er med i dag?</h5>
         <b-btn
-          v-for="(sp, si) in selectedParticipants"
-          class="mx-1"
+          v-for="(p, i) in participantsSorted"
           size="sm"
-          variant="dark"
-          :key="`selected-participant-${si}`"
-          @click="removeUser(sp, si)"
+          variant="primary"
+          class="mb-2 mr-2"
+          :key="`participant-${i}`"
+          @click="addUser(p, i)"
         >
-          {{ sp }}
-          <font-awesome-icon icon="times"></font-awesome-icon>
+          {{ p }}
         </b-btn>
+      <div class="mt-3">
+        <b-btn
+          variant="dark"
+          size="sm"
+          @click="displayCustom = !displayCustom"
+        >
+          Egendefinert
+        </b-btn>
+        <b-input-group
+          v-if="displayCustom"
+          size="sm"
+          class="text-right mt-2"
+        >
+          <b-input
+            v-model="customName"
+            placeholder="Navn..."
+            :state="customName.length > 1"
+          >
+          </b-input>
+          <b-input-group-append>
+            <b-btn
+              variant="success"
+              @click="addCustomUser()"
+            >
+              Legg til
+            </b-btn>
+          </b-input-group-append>
+        </b-input-group>
+        <b-alert
+          :show="error"
+          size="sm"
+          variant="danger"
+        >
+          {{ error }}
+        </b-alert>
       </div>
-  </b-card>
-  <div class="col-12 text-center">
-    <b-btn
-      v-if="selectedParticipants.length > 1"
-      class="mt-2"
-      variant="success"
-      size="lg"
-      :disabled="loading === true"
-      @click="selectRandom()"
-    >
-        Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
-     </b-btn>
-  </div>
-  <div
-    class="col-12 sara-dialogue position-absolute"
-  >
-    <div class="chat-bubble mt-2">
-      <h3 class="mt-2">
-        {{ sentence }}
+    </b-card>
+    <b-card class="col-12 col-md-5 offset-md-2 text-left">
+      <h5 v-if="selectedParticipants.length">Valgt</h5>
         <font-awesome-icon
           v-if="loading"
           icon="circle-notch"
           spin
         >
         </font-awesome-icon>
-      </h3>
+        <div v-else>
+          <b-btn
+            v-for="(sp, si) in selectedParticipants"
+            class="mx-1"
+            size="sm"
+            variant="dark"
+            :key="`selected-participant-${si}`"
+            @click="removeUser(sp, si)"
+          >
+            {{ sp }}
+            <font-awesome-icon icon="times"></font-awesome-icon>
+          </b-btn>
+        </div>
+    </b-card>
+    <div class="col-12 text-center">
+      <b-btn
+        v-if="selectedParticipants.length > 1"
+        class="mt-2"
+        variant="success"
+        size="lg"
+        :disabled="loading === true"
+        @click="selectRandom()"
+      >
+          Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
+       </b-btn>
     </div>
   </div>
-</div>
+    <div
+      v-if="operator"
+      :class="operator.class"
+      class="operator position-fixed bottom-right"
+    >
+      <div
+        class="col-12 sara-dialogue position-absolute"
+      >
+        <div class="chat-bubble position-absolute mt-2">
+          <h3 class="mt-2">
+            {{ sentence }}
+            <font-awesome-icon
+              v-if="loading"
+              icon="circle-notch"
+              spin
+            >
+            </font-awesome-icon>
+          </h3>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -128,6 +136,8 @@ export default {
         'Har du noen gang sett en oter? Jeg har sett ' + Math.ceil(Math.random() * 50) + '.',
         'I Russland har de et monument til minne om labrotter.',
         'Visste du at Volkswagen ble dannet av Hitler? Rare greier.',
+        'Ikke lenge igjen til jul!',
+        'I dag har jeg det travelt. Jeg skal nemlig på konsert.',
         'Hvor ble det av samleplatene med pan flute moods?',
         'Oi, oi oi! I dag var det mange flotte klesplagg!',
         'Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.',
@@ -140,8 +150,12 @@ export default {
         'Skal vi se! Jeg legger til litt her, trekker fra der. Ok, sånn!',
         'Denne er kjempelett! Klarer du å gjette rekkefølgen?',
         'Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.',
+        'Har du husket å vaske buksene dine?',
+        'Don\'t worry, be happy! Som de sier på Bahamas.',
+        'Oppfinnere min lar meg si mange rare ting. For eksempel: Bak skyene er himmelen alltid blå',
+        'Steike, her var det litt å velge blant. Skal vi se, skal vi sjå. Buksa på.',
         'Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.',
-        'Hmm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
+        'Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
         'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
         'Lottotrekning!',
         'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
@@ -149,6 +163,37 @@ export default {
       loading: false,
       voiceRate: 0.9,
       pitch: 1.0,
+      operator: null,
+      operators: [
+        {
+          name: 'Sara',
+          class: 'operator-sara',
+          avatar: 'standup-sara.png',
+          voice: 'Norwegian Female',
+          pitch: 1.0
+        },
+        {
+          name: 'Stand-up Stein',
+          class: 'operator-stein',
+          avatar: 'standup-stein.png',
+          voice: 'Norwegian Male',
+          pitch: 1.0
+        },
+        {
+          name: 'Shadow',
+          class: 'operator-shadow',
+          avatar: 'shadow.png',
+          voice: 'Norwegian Male',
+          pitch: 0.5
+        },
+        {
+          name: 'Businessmann',
+          class: 'operator-business',
+          avatar: 'man.png',
+          voice: 'Finnish Male',
+          pitch: 1.0
+        }
+      ],
       voice: 'Norwegian Female',
       turnTypes: [
         'direction',
@@ -160,9 +205,14 @@ export default {
   },
   mounted () {
     let selectedIntro = this.fisherYates(this.introSentences)[0]
-    this.sentence = selectedIntro
+    this.operator = this.randomItem(this.operators)
+    if (this.operator.name !== 'Sara') {
+      this.sentence = `Hei. Sara er dessverre ikke her i dag, så dere må ta til takke med meg, ${this.operator.name}. Men, det kan jo bli artig læll!`
+    } else {
+      this.sentence = selectedIntro
+    }
     window.setTimeout(() => {
-      window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
     }, 1500)
   },
   computed: {
@@ -171,6 +221,13 @@ export default {
       let temp = this.participants
       temp = temp.sort((a, b) => a.toLowerCase() > b.toLowerCase())
       return temp
+    },
+    selectedOperator () {
+      if (this.operator) {
+        return this.operator
+      } else {
+        return ''
+      }
     }
   },
   methods: {
@@ -184,6 +241,20 @@ export default {
         a[i] = itemAtIndex
       }
       return a
+    },
+    randomItem (input) {
+      if (input) {
+        const seed = Math.random();
+        let ix = 0;
+        if (Number.parseFloat(seed) < 0.7) {
+          ix = 0
+        } else {
+          ix = Math.floor(Math.random() * input.length)
+        }
+        return input[ix]
+      } else {
+        return
+      }
     },
     addCustomUser () {
       this.error = null
@@ -231,52 +302,14 @@ export default {
 
       let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
       this.sentence = selectedLoadingSentence
-      window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
 
       window.setTimeout(() => {
         this.sentence = sentence
-        window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
         this.loading = false
       }, 7000)
     }
   }
 }
 </script>
-<style scoped>
-.chat-bubble {
-  position: relative;
-  padding: 15px;
-  width: 50%;
-  margin: 0 0 0 40%;
-  border: 5px solid #5a8f00;
-  color: #333;
-  background: #fff;
-  border-radius: 10px;
-}
-.chat-bubble::before {
-  content: "";
-  position: absolute;
-  bottom: -20px;
-  left: 90%;
-  border-width: 20px 20px 0;
-  border-style: solid;
-  border-color: #5a8f00 transparent;
-  display: block;
-  width: 0;
-}
-.chat-bubble::after {
-  content: "";
-  position: absolute;
-  bottom: -13px;
-  left: 91%;
-  border-width: 13px 13px 0;
-  border-style: solid;
-  border-color: #fff transparent;
-  display: block;
-  width: 0;
-}
-.sara-dialogue {
-  bottom: 30vh;
-  right: 0;
-}
-</style>
