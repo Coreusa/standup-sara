@@ -244,16 +244,14 @@ export default {
     },
     randomItem (input) {
       if (input) {
-        const seed = Math.random();
-        let ix = 0;
+        const seed = Math.random()
+        let ix = 0
         if (Number.parseFloat(seed) < 0.7) {
           ix = 0
         } else {
           ix = Math.floor(Math.random() * input.length)
         }
         return input[ix]
-      } else {
-        return
       }
     },
     addCustomUser () {
