@@ -93,13 +93,16 @@
   >
     <div class="chat-bubble mt-2">
       <h3 class="mt-2">
-        {{ sentence }}
-        <font-awesome-icon
-          v-if="loading"
-          icon="circle-notch"
-          spin
-        >
-        </font-awesome-icon>
+        {{ sentence }}<span class="spin">🤪</span>
+        <span v-if="loading">
+          <span class="spin">🤪</span>
+          <font-awesome-icon
+            v-if="loading"
+            icon="circle-notch"
+            spin
+          >
+          </font-awesome-icon>
+        </span>
       </h3>
     </div>
   </div>
@@ -147,23 +150,29 @@ export default {
         'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
       ],
       loading: false,
-      voiceRate: 0.9,
+      voiceRate: 1.0,
       pitch: 1.0,
       voice: 'Norwegian Female',
       turnTypes: [
         'direction',
         'random',
         'chosen',
-        'backwards'
+        'backwards',
+        'weird'
       ]
     }
   },
   mounted () {
-    let selectedIntro = this.fisherYates(this.introSentences)[0]
-    this.sentence = selectedIntro
+    this.sentence = 'Varmer opp stemmen min, vent litt...'
+    this.loading = true;
     window.setTimeout(() => {
+      let selectedIntro = this.fisherYates(this.introSentences)[0]
+      this.sentence = selectedIntro
+      window.responsiveVoice.enableWindowClickHook()
+      this.loading = false
+      window.responsiveVoice.clickEvent();
       window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
-    }, 1500)
+    }, 3000)
   },
   computed: {
     participantsSorted () {
@@ -227,6 +236,14 @@ export default {
           reversed = reversed.reverse()
           sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, men slik ble det i dag.`
           break
+        case 'weird':
+          // Find the middle point
+          var middleIndex = Math.round((shuffled.length - 1) / 2)
+          let result1 = shuffled.slice(0, middleIndex);
+          let result2 = shuffled.slice(middleIndex, shuffled.length)
+          result2 = result2.reverse()
+          sentence = `Denne gangen går vi begge veier! Å, jada! Det vil si først ${result1.join(' så ')}. Deretter ${result2.join(' så ')}. Det ble litt syre, sårri. Har ikke fått min daglige dose med assemblykode.`
+          break
       }
 
       let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
@@ -275,6 +292,12 @@ export default {
   display: block;
   width: 0;
 }
+.spin {
+  animation: 3s spin infinite;
+}
+
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
 .sara-dialogue {
   bottom: 30vh;
   right: 0;
