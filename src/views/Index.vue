@@ -131,8 +131,10 @@ export default {
         'Visste du at Volkswagen ble dannet av Hitler? Rare greier.',
         'Hvor ble det av samleplatene med pan flute moods?',
         'Det var Alexander Fleming som fant opp penicillin.',
-        'Visste du at det har vært fem istider i jordens historie? Brr!',
+        'I går fikk jeg høre noe skikkelig rart. Type veldig.',
+        'Visste du at det har vært fem istider i jordens historie? Birr!',
         'Oi, oi oi! I dag var det mange flotte klesplagg!',
+        '2000 omdreininger! 2 vertikale skjæreblader! Majones! Peanøtt! Smør!',
         'Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.',
         'Her er en gåte: Hvor kan alle sitte, unntatt du?',
         'Den første istiden på jorden var for ca. 2,5 milliarder år siden. Det er lenge siden.',
@@ -146,13 +148,14 @@ export default {
         'Denne er kjempelett! Klarer du å gjette rekkefølgen?',
         'Her må jeg faktisk ringe en venn. Håper hun tar telefonen.',
         'Tralalalalalalalala. La la. Trall',
+        'Hvis du har ' + Math.ceil(Math.random() * 1000) + ' epler og legger til ' + Math.ceil(Math.random() * 1000)  + ' appelsiner. Hvor mange frukter har du?',
         'Hiiiv og hoi, snart er skatten vår! Da kan vi ta det rooolig til neste stand-up.',
         'Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.',
         'Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.',
         'Hmm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
         'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
         'Lottotrekning!',
-        'Aha! Noen av mine favoritter med i dag! Nice.',
+        'Aha! Noen av mine favoritter med i dag! Nais.',
         'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
       ],
       loading: false,
@@ -179,7 +182,7 @@ export default {
       this.loading = false
       window.responsiveVoice.clickEvent();
       window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
-    }, 3000)
+    }, 2000)
   },
   computed: {
     participantsSorted () {
