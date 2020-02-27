@@ -93,17 +93,14 @@
   >
     <div class="chat-bubble mt-2">
       <h3 class="mt-2">
-        {{ sentence }}<span class="spin">🤪</span>
+        {{ sentence }}<span class="spin"></span>
         <span v-if="loading">
           <span class="spin">🤪</span>
-          <font-awesome-icon
-            v-if="loading"
-            icon="circle-notch"
-            spin
-          >
-          </font-awesome-icon>
         </span>
       </h3>
+    </div>
+    <div class="app-version">
+      Versjon <strong>{{ appVersion }}</strong>
     </div>
   </div>
 </div>
@@ -116,6 +113,7 @@ export default {
   name: 'home',
   data () {
     return {
+      appVersion: require('../../package.json').version,
       participants: Participants,
       selectedParticipants: [],
       displayCustom: false,
@@ -132,8 +130,12 @@ export default {
         'I Russland har de et monument til minne om labrotter.',
         'Visste du at Volkswagen ble dannet av Hitler? Rare greier.',
         'Hvor ble det av samleplatene med pan flute moods?',
+        'Det var Alexander Fleming som fant opp penicillin.',
+        'Visste du at det har vært fem istider i jordens historie? Brr!',
         'Oi, oi oi! I dag var det mange flotte klesplagg!',
         'Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.',
+        'Her er en gåte: Hvor kan alle sitte, unntatt du?',
+        'Den første istiden på jorden var for ca. 2,5 milliarder år siden. Det er lenge siden.',
         'Jeg kan over ' + Math.ceil(Math.random() * 10000) + ' uttrykk!',
         'Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.',
         'Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!'
@@ -142,11 +144,15 @@ export default {
         'La meg spinne tryllestaven min litt, så skal jeg finne ut av det!',
         'Skal vi se! Jeg legger til litt her, trekker fra der. Ok, sånn!',
         'Denne er kjempelett! Klarer du å gjette rekkefølgen?',
+        'Her må jeg faktisk ringe en venn. Håper hun tar telefonen.',
+        'Tralalalalalalalala. La la. Trall',
+        'Hiiiv og hoi, snart er skatten vår! Da kan vi ta det rooolig til neste stand-up.',
         'Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.',
         'Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.',
         'Hmm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
         'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
         'Lottotrekning!',
+        'Aha! Noen av mine favoritter med i dag! Nice.',
         'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
       ],
       loading: false,
@@ -158,7 +164,8 @@ export default {
         'random',
         'chosen',
         'backwards',
-        'weird'
+        'weird',
+        'noidea'
       ]
     }
   },
@@ -236,6 +243,9 @@ export default {
           reversed = reversed.reverse()
           sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, men slik ble det i dag.`
           break
+        case 'noidea':
+          sentence = `I dag vet jeg faktisk ikke. Hva med å starte i den rekkefølgen dere valgte?`
+          break
         case 'weird':
           // Find the middle point
           var middleIndex = Math.round((shuffled.length - 1) / 2)
@@ -293,13 +303,24 @@ export default {
   width: 0;
 }
 .spin {
-  animation: 3s spin infinite;
+  animation: 1.2s rotation infinite linear;
+  position: absolute;
 }
 
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
-
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 .sara-dialogue {
   bottom: 30vh;
   right: 0;
+}
+
+.app-version {
+  margin-top: 10px;
 }
 </style>
