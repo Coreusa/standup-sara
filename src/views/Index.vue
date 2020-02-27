@@ -148,7 +148,7 @@ export default {
         'Denne er kjempelett! Klarer du å gjette rekkefølgen?',
         'Her må jeg faktisk ringe en venn. Håper hun tar telefonen.',
         'Tralalalalalalalala. La la. Trall',
-        'Hvis du har ' + Math.ceil(Math.random() * 1000) + ' epler og legger til ' + Math.ceil(Math.random() * 1000)  + ' appelsiner. Hvor mange frukter har du?',
+        'Hvis du har ' + Math.ceil(Math.random() * 1000) + ' epler og legger til ' + Math.ceil(Math.random() * 1000) + ' appelsiner. Hvor mange frukter har du?',
         'Hiiiv og hoi, snart er skatten vår! Da kan vi ta det rooolig til neste stand-up.',
         'Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.',
         'Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.',
@@ -174,13 +174,13 @@ export default {
   },
   mounted () {
     this.sentence = 'Varmer opp stemmen min, vent litt...'
-    this.loading = true;
+    this.loading = true
     window.setTimeout(() => {
       let selectedIntro = this.fisherYates(this.introSentences)[0]
       this.sentence = selectedIntro
       window.responsiveVoice.enableWindowClickHook()
       this.loading = false
-      window.responsiveVoice.clickEvent();
+      window.responsiveVoice.clickEvent()
       window.responsiveVoice.speak(this.sentence, this.voice, { rate: this.voiceRate, pitch: this.pitch })
     }, 2000)
   },
@@ -252,7 +252,7 @@ export default {
         case 'weird':
           // Find the middle point
           var middleIndex = Math.round((shuffled.length - 1) / 2)
-          let result1 = shuffled.slice(0, middleIndex);
+          let result1 = shuffled.slice(0, middleIndex)
           let result2 = shuffled.slice(middleIndex, shuffled.length)
           result2 = result2.reverse()
           sentence = `Denne gangen går vi begge veier! Å, jada! Det vil si først ${result1.join(' så ')}. Deretter ${result2.join(' så ')}. Det ble litt syre, sårri. Har ikke fått min daglige dose med assemblykode.`
