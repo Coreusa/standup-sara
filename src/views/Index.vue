@@ -52,7 +52,7 @@
     <div class="col-12 sara-dialogue text-center position-absolute">
       <div class="chat-bubble mt-2">
         <h3 class="mt-2">
-          {{ sentence }}<span class="spin"></span>
+          <span v-bind:style=sentenceStyle>{{ sentence }}</span><span class="spin"></span>
           <span v-if="loading">
             <span class="spin">🤪</span>
           </span>
@@ -97,7 +97,8 @@ export default {
         'Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.',
         'Jeg kan over ' + Math.ceil(Math.random() * 10000) + ' uttrykk!',
         'Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.',
-        'Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!'
+        'Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!',
+        { text: 'Cyberpolitiet er inne på inspeksjon, de ber oss fortsette som vanlig', style: { animation: 'cop-lights 1s infinite' } }
       ],
       loadingSentences: [
         'La meg spinne tryllestaven min litt, så skal jeg finne ut av det!',
@@ -116,7 +117,9 @@ export default {
         'Kan jeg spørre publikum?',
         'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
         'Lottotrekning!',
-        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!'
+        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!',
+        'Helt urelatert, men den verdenskjente vitenskapsmannen Neil deGrasse Tyson var en gang en ubeseiret wrestler',
+        { text: 'I dag tenk- Oisann beklager, jeg sølte malingsspannet', style: { color: 'green' } }
       ],
       loading: false,
       voiceRate: 0.9,
@@ -162,7 +165,8 @@ export default {
     }
   },
   mounted () {
-    let selectedIntro = this.fisherYates(this.introSentences)[0]
+    const selected = this.fisherYates(this.introSentences)[0]
+    let selectedIntro = selected.text || selected
     this.operator = this.randomItem(this.operators)
     if (this.operator.name !== 'Sara') {
       this.sentence = `Hei. Sara er dessverre ikke her i dag, så dere må ta til takke med meg, ${this.operator.name}. `
@@ -170,6 +174,7 @@ export default {
     } else {
       this.sentence = selectedIntro
     }
+    this.sentenceStyle = selected.style || {}
     window.setTimeout(() => {
       window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
     }, 2000)
@@ -260,15 +265,19 @@ export default {
           break
       }
 
-      let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
-      this.sentence = selectedLoadingSentence
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      const onLoadingSentenceCompleted = () => {
+        setTimeout(() => {
+          this.sentence = sentence
+          this.sentenceStyle = {}
+          window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+          this.loading = false
+        }, 1500)
+      }
 
-      window.setTimeout(() => {
-        this.sentence = sentence
-        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
-        this.loading = false
-      }, 7000)
+      let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
+      this.sentence = selectedLoadingSentence.text || selectedLoadingSentence
+      this.sentenceStyle = selectedLoadingSentence.style || {}
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch, onend: onLoadingSentenceCompleted })
     }
   }
 }

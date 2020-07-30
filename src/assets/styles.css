@@ -83,3 +83,9 @@ body {
 .app-version {
   margin-top: 10px;
 }
+
+@keyframes cop-lights {
+  0%   {color: blue;}
+  50%  {color: red;}
+  100%   {color: blue;}
+}
