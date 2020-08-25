@@ -1,0 +1,30 @@
+[
+  {
+   "name": "Sara",
+   "class": "operator-sara",
+   "avatar": "standup-sara.png",
+   "voice": "Norwegian Female",
+   "pitch": 1.0
+  },
+  {
+   "name": "Stand-up Stein",
+   "class": "operator-stein",
+   "avatar": "standup-stein.png",
+   "voice": "Norwegian Male",
+   "pitch": 1.0
+  },
+  {
+   "name": "Shadow",
+   "class": "operator-shadow",
+   "avatar": "shadow.png",
+   "voice": "Norwegian Male",
+   "pitch": 0.7
+  },
+  {
+   "name": "Businessmann",
+   "class": "operator-business",
+   "avatar": "man.png",
+   "voice": "Swedish Male",
+   "pitch": 1.0
+  }
+]

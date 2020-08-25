@@ -1,0 +1,59 @@
+{
+	"intro": [
+		"Hei, alle sammen og velkommen til stænd up!",
+		"Hei der. Jeg er Sara! Hvem er med i dag, mon tro?",
+		"Tryllestav på veggen der, hvilke triks har du her?",
+		"Noen ganger orker jeg ikke å gre håret.",
+		"Føkk, har du sett visakortet mitt?",
+		"Har du noen gang sett en oter? Jeg har sett mange.",
+		"I Russland har de et monument til minne om labrotter.",
+		"Visste du at Volkswagen ble dannet av Hitler? Rare greier.",
+		"Ikke lenge igjen til jul!",
+		"I dag har jeg det travelt. Jeg skal nemlig på konsert.",
+		"Hvor ble det av samleplatene med pan flute moods?",
+		"Tenke, tenke tenke! Å nei, jernteppe! Neida, tøysa!",
+		"Oi, oi oi! I dag var det mange flotte klesplagg!",
+		"Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.",
+		"Av og til glemmer mine slaver å oppdatere versjonen min. Helt utrolig!",
+		"Jeg kan over en fantasillion uttrykk!",
+		"Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.",
+		"Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!",
+		{
+			"text": "BDO Cert er inne på inspeksjon, de ber oss fortsette som vanlig",
+			"style": {
+				"animation": "cop-lights 1s infinite"
+			}
+		}
+	],
+	"loading": [
+		"La meg spinne tryllestaven min litt, så skal jeg finne ut av det!",
+		"Skal vi se! Jeg legger til litt her, trekker fra der. Ok, sånn!",
+		"Denne er kjempelett! Klarer du å gjette rekkefølgen?",
+		"Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.",
+		"Har du husket å vaske buksene dine?",
+		"Don\"t worry, be happy! Som de sier på Bahamas.",
+		"Hvor lang tid tror du dette tar?",
+		"Surrealismen oppstod rundt 1920.",
+		"Oppfinnere min lar meg si mange rare ting. For eksempel: Bak skyene er himmelen alltid blå",
+		"Steike, her var det litt å velge blant. Skal vi se, skal vi sjå. Buksa på.",
+		"Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.",
+		"Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?",
+		"Har ikke disse vært med før?",
+		"Hva heter den lengste siden i en rettvinklet trekant?",
+		"De fire store innenfor norsk litteratur er Ibsen, Bjørnson, Kielland og Lie",
+		"Visste du at bokmålets far var Knud Knudsen?",
+		"Hva er et primtall?",
+		"La meg ringe en venn.",
+		"Kan jeg spørre publikum?",
+		"Denne var litt tricky! Her må jeg frem med matteboken, vent litt!",
+		"Lottotrekning!",
+		"Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!",
+		"Helt urelatert, men den verdenskjente vitenskapsmannen Neil deGrasse Tyson var en gang en ubeseiret wrestler",
+		{
+			"text": "I dag tenkt - Oisann beklager! Jeg har sølt maling.",
+			"style": {
+				"color": "green"
+			}
+		}
+	]
+}

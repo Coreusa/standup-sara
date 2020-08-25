@@ -6,9 +6,30 @@
     </h1>
   </div>
   <b-card class="col-12 col-md-5 bg-light text-left">
-    <h5>Hvem som er med i dag?</h5>
-    <b-btn v-for="(p, i) in participants" size="sm" variant="primary" class="mb-2 mr-2" :key="`participant-${i}`" @click="addUser(p, i)">
+    <h5>Hvem er med i dag?</h5>
+    <b-btn
+      v-for="(p, i) in participants"
+      size="sm"
+      variant="primary"
+      class="mr-2"
+      :key="`participant-${i}`"
+      @click="addUser(p, i)"
+    >
       {{ p }}
+    </b-btn>
+    <b-btn
+      size="sm"
+      variant="success"
+      class="mr-2"
+      @click="addAllUsers()"
+    >
+      Alle!
+      <font-awesome-icon
+        icon="smile-beam"
+        class="ml-1"
+        spin
+      >
+      </font-awesome-icon>
     </b-btn>
     <div class="mt-3">
       <b-btn variant="dark" size="sm" @click="displayCustom = !displayCustom">
@@ -30,12 +51,31 @@
   </b-card>
   <b-card class="col-12 col-md-5 offset-md-2 text-left">
     <h5 v-if="selectedParticipants.length">Valgt</h5>
-    <font-awesome-icon v-if="loading" icon="circle-notch" spin>
+    <font-awesome-icon
+      v-if="loading"
+      icon="circle-notch"
+      spin
+    >
     </font-awesome-icon>
     <div v-else>
-      <b-btn v-for="(sp, si) in selectedParticipants" class="mx-1" size="sm" variant="dark" :key="`selected-participant-${si}`" @click="removeUser(sp, si)">
+      <b-btn
+        v-for="(sp, si) in selectedParticipants"
+        class="mx-1"
+        size="sm"
+        variant="dark"
+        :key="`selected-participant-${si}`"
+        @click="removeUser(sp, si)"
+      >
         {{ sp }}
         <font-awesome-icon icon="times"></font-awesome-icon>
+      </b-btn>
+      <b-btn
+        v-if="selectedParticipants.length"
+        size="sm"
+        variant="danger"
+        @click="selectedParticipants = []"
+      >
+        Fjern alle
       </b-btn>
     </div>
   </b-card>
@@ -52,7 +92,8 @@
     <div class="col-12 sara-dialogue text-center position-absolute">
       <div class="chat-bubble mt-2">
         <h3 class="mt-2">
-          <span v-bind:style=sentenceStyle>{{ sentence }}</span><span class="spin"></span>
+          <span :style="sentenceStyle">{{ sentence }}</span>
+          <span class="spin"></span>
           <span v-if="loading">
             <span class="spin">🤪</span>
           </span>
@@ -68,6 +109,8 @@
 <script>
 // @ is an alias to /src
 import Participants from '@/assets/users.json'
+import Sentences from '@/assets/sentences.json'
+import Operators from '@/assets/operators.json'
 export default {
   name: 'home',
   data () {
@@ -80,81 +123,13 @@ export default {
       error: null,
       timeoutId: null,
       sentence: 'Hei, alle sammen og velkommen til stand up!',
-      introSentences: [
-        'Hei, alle sammen og velkommen til stænd up!',
-        'Hei der. Jeg er Sara! Hvem er med i dag, mon tro?',
-        'Tryllestav på veggen der, hvilke triks har du her?',
-        'Noen ganger orker jeg ikke å gre håret.',
-        'Føkk, har du sett visakortet mitt?',
-        'Har du noen gang sett en oter? Jeg har sett ' + Math.ceil(Math.random() * 50) + '.',
-        'I Russland har de et monument til minne om labrotter.',
-        'Visste du at Volkswagen ble dannet av Hitler? Rare greier.',
-        'Ikke lenge igjen til jul!',
-        'I dag har jeg det travelt. Jeg skal nemlig på konsert.',
-        'Hvor ble det av samleplatene med pan flute moods?',
-        'Tenke, tenke tenke! Å nei, jernteppe! Neida, tøysa!',
-        'Oi, oi oi! I dag var det mange flotte klesplagg!',
-        'Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.',
-        'Jeg kan over ' + Math.ceil(Math.random() * 10000) + ' uttrykk!',
-        'Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.',
-        'Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!',
-        { text: 'Cyberpolitiet er inne på inspeksjon, de ber oss fortsette som vanlig', style: { animation: 'cop-lights 1s infinite' } }
-      ],
-      loadingSentences: [
-        'La meg spinne tryllestaven min litt, så skal jeg finne ut av det!',
-        'Skal vi se! Jeg legger til litt her, trekker fra der. Ok, sånn!',
-        'Denne er kjempelett! Klarer du å gjette rekkefølgen?',
-        'Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.',
-        'Har du husket å vaske buksene dine?',
-        'Don\'t worry, be happy! Som de sier på Bahamas.',
-        'Hvor lang tid tror du dette tar?',
-        'Oppfinnere min lar meg si mange rare ting. For eksempel: Bak skyene er himmelen alltid blå',
-        'Steike, her var det litt å velge blant. Skal vi se, skal vi sjå. Buksa på.',
-        'Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.',
-        'Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?',
-        'Har ikke disse vært med før?',
-        'La meg ringe en venn.',
-        'Kan jeg spørre publikum?',
-        'Denne var litt tricky! Her må jeg frem med matteboken, vent litt!',
-        'Lottotrekning!',
-        'Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!',
-        'Helt urelatert, men den verdenskjente vitenskapsmannen Neil deGrasse Tyson var en gang en ubeseiret wrestler',
-        { text: 'I dag tenk- Oisann beklager, jeg sølte malingsspannet', style: { color: 'green' } }
-      ],
+      introSentences: Sentences.intro,
+      loadingSentences: Sentences.loading,
+      operators: Operators,
       loading: false,
       voiceRate: 0.9,
       pitch: 1.0,
       operator: null,
-      operators: [
-        {
-          name: 'Sara',
-          class: 'operator-sara',
-          avatar: 'standup-sara.png',
-          voice: 'Norwegian Female',
-          pitch: 1.0
-        },
-        {
-          name: 'Stand-up Stein',
-          class: 'operator-stein',
-          avatar: 'standup-stein.png',
-          voice: 'Norwegian Male',
-          pitch: 1.0
-        },
-        {
-          name: 'Shadow',
-          class: 'operator-shadow',
-          avatar: 'shadow.png',
-          voice: 'Norwegian Male',
-          pitch: 0.7
-        },
-        {
-          name: 'Businessmann',
-          class: 'operator-business',
-          avatar: 'man.png',
-          voice: 'Swedish Male',
-          pitch: 1.0
-        }
-      ],
       voice: 'Norwegian Female',
       turnTypes: [
         'direction',
@@ -232,6 +207,9 @@ export default {
     addUser (user, index) {
       this.participants.splice(index, 1)
       this.selectedParticipants.push(user)
+    },
+    addAllUsers () {
+      this.selectedParticipants = this.participants
     },
     random (max = 10) {
       // TODO: Invalid when max is 1
