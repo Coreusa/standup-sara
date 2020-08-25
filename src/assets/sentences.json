@@ -13,9 +13,13 @@
 		"Hvor ble det av samleplatene med pan flute moods?",
 		"Tenke, tenke tenke! Å nei, jernteppe! Neida, tøysa!",
 		"Oi, oi oi! I dag var det mange flotte klesplagg!",
+		"Håper lottomaskinen fungerer i dag.",
+		"Aldri la trommisen håndtere pengene i bandet.",
+		"Kanskje jeg skal farge håret blått? Eller grønt?",
 		"Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.",
 		"Av og til glemmer mine slaver å oppdatere versjonen min. Helt utrolig!",
 		"Jeg kan over en fantasillion uttrykk!",
+		"Hvor ble det av ringetonene man kunne bestille på TV?",
 		"Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.",
 		"Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!",
 		{
@@ -34,11 +38,13 @@
 		"Don\"t worry, be happy! Som de sier på Bahamas.",
 		"Hvor lang tid tror du dette tar?",
 		"Surrealismen oppstod rundt 1920.",
+		"Husk å like, dele, abonnerer og Google Plusificate denne siden",
 		"Oppfinnere min lar meg si mange rare ting. For eksempel: Bak skyene er himmelen alltid blå",
 		"Steike, her var det litt å velge blant. Skal vi se, skal vi sjå. Buksa på.",
 		"Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.",
 		"Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?",
 		"Har ikke disse vært med før?",
+		"Håper jeg ikke føkker dette opp.",
 		"Hva heter den lengste siden i en rettvinklet trekant?",
 		"De fire store innenfor norsk litteratur er Ibsen, Bjørnson, Kielland og Lie",
 		"Visste du at bokmålets far var Knud Knudsen?",
@@ -55,5 +61,23 @@
 				"color": "green"
 			}
 		}
+	],
+	"added": [
+		"{name} er på plass.",
+		"{name} ser ekstra flott ut i dag!",
+		"Nei, har du sett? Der er {name} også!",
+		"{name} rapporterer inn.",
+		"Som vanlig er {name} her.",
+		"Aldri en dag uten {name}!",
+		"{name} er jo liksom alltid med.",
+		"Dæven, {name} deg har jeg ikke sett på lenge! Halla!",
+		"Hei på deg, {name}!",
+		"Kan vi ta en standup uten {name}?",
+		"Du må ta en fridag, {name}!",
+		"Tror {name} har en vits på lager, jeg.",
+		"Overraskelse! {name} er med!",
+		"Kan jeg få en applaus for {name}?",
+		"{name} spanderer neste runde.",
+		"Åja, så {name} har våknet endelig?"
 	]
 }

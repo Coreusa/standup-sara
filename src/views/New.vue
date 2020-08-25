@@ -1,120 +1,117 @@
 <template>
-<div class="row no-gutters mx-auto">
-  <div class="col-12 mb-5 text-center">
-    <h1>
-      Velkommen til Stand-up Sara!
-    </h1>
-  </div>
-  <b-card class="col-12 col-md-5 bg-light text-left">
-    <h5>Hvem er med i dag?</h5>
-    <b-btn
-      v-for="(p, i) in participants"
-      size="sm"
-      variant="primary"
-      class="mr-2"
-      :key="`participant-${i}`"
-      :disabled="loading"
-      @click="addUser(p, i)"
+  <b-container fluid>
+    <b-row
+      class="d-flex align-content-center justify-items-center"
     >
-      {{ p }}
-    </b-btn>
-    <b-btn
-      v-if="participants.length"
-      size="sm"
-      variant="success"
-      class="mr-2"
-      :disabled="loading"
-      @click="addAllUsers()"
-    >
-      Alle!
-      <font-awesome-icon
-        icon="smile-beam"
-        class="ml-1"
-        spin
+      <b-col
+        sm="12"
+        md="6"
+        class="align-content-center justify-items-center mx-auto"
       >
-      </font-awesome-icon>
-    </b-btn>
-    <div class="mt-3">
-      <b-btn
-        variant="dark"
-        size="sm"
-        :disabled="loading"
-        @click="displayCustom = !displayCustom"
-      >
-        Egendefinert
-      </b-btn>
-      <b-input-group v-if="displayCustom" size="sm" class="text-right mt-2">
-        <b-input v-model="customName" placeholder="Navn..." :state="customName.length > 1">
-        </b-input>
-        <b-input-group-append>
-          <b-btn variant="success" @click="addCustomUser()">
-            Legg til
+        <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
+        <div class="bg-light p-3 rounded d-flex shadow hero position-relative">
+          <div
+            v-if="operator"
+            :class="operator.class"
+            class="operator position-absolute bottom-right"
+          >
+            <!-- <div class="col-12 sara-dialogue text-center position-absolute">
+              <div class="chat-bubble mt-2">
+                <h3 class="mt-2">
+                  <span :style="sentenceStyle">{{ sentence }}</span>
+                  <span class="spin"></span>
+                  <span v-if="loading">
+                    <span class="spin">🤪</span>
+                  </span>
+                </h3>
+              </div>
+              <div class="app-version">
+                Versjon <strong>{{ appVersion }}</strong>
+              </div>
+            </div> -->
+          </div>
+          <b-col
+            sm="12"
+            md="7"
+            class="d-flex justify-content-center align-items-center"
+          >
+            <div class="sentence">
+              <h4>
+                "{{ sentence }}"
+                <span class="spin"></span>
+                <span v-if="loading">
+                  <span class="spin">🤪</span>
+                </span>
+              </h4>
+            </div>
+          </b-col>
+        </div>
+        <b-col class="mt-4">
+          <h5>Hvem er med i dag?</h5>
+          <p v-if="!participants.length">
+            Alle er valgt.
+          </p>
+          <b-btn
+            v-for="(p, i) in participants"
+            size="sm"
+            variant="primary"
+            class="mr-2"
+            :key="`participant-${i}`"
+            :disabled="loading"
+            @click="addUser(p, i)"
+          >
+            {{ p }}
           </b-btn>
-        </b-input-group-append>
-      </b-input-group>
-      <b-alert :show="error" size="sm" variant="danger">
-        {{ error }}
-      </b-alert>
-    </div>
-  </b-card>
-  <b-card class="col-12 col-md-5 offset-md-2 text-left">
-    <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
-    <font-awesome-icon
-      v-if="loading"
-      icon="circle-notch"
-      class="mr-2"
-      spin
-    >
-    </font-awesome-icon>
-    <span v-if="loading">Sara tenker...</span>
-    <div v-else>
-      <b-btn
-        v-for="(sp, si) in selectedParticipants"
-        class="mx-1"
-        size="sm"
-        variant="dark"
-        :key="`selected-participant-${si}`"
-        @click="removeUser(sp, si)"
-      >
-        {{ sp }}
-        <font-awesome-icon icon="times"></font-awesome-icon>
-      </b-btn>
-      <b-btn
-        v-if="selectedParticipants.length"
-        size="sm"
-        variant="danger"
-        @click="removeAllUsers()"
-      >
-        Fjern alle
-      </b-btn>
-    </div>
-  </b-card>
-  <div class="col-12 text-center">
-    <b-btn v-if="selectedParticipants.length > 1" class="mt-2" variant="success" size="lg" :disabled="loading === true" @click="selectRandom()">
-      Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
-    </b-btn>
-  </div>
-  <div
-    v-if="operator"
-    :class="operator.class"
-    class="operator position-fixed bottom-right"
-  >
-    <div class="col-12 sara-dialogue text-center position-absolute">
-      <div class="chat-bubble mt-2">
-        <h3 class="mt-2">
-          <span :style="sentenceStyle">{{ sentence }}</span>
-          <span class="spin"></span>
-          <span v-if="loading">
-            <span class="spin">🤪</span>
-          </span>
-        </h3>
-      </div>
-      <div class="app-version">
-        Versjon <strong>{{ appVersion }}</strong>
-      </div>
-    </div>
-  </div>
-</div>
+          <b-btn
+            v-if="participants.length"
+            size="sm"
+            variant="success"
+            class="mr-2"
+            :disabled="loading"
+            @click="addAllUsers()"
+          >
+            Alle!
+            <font-awesome-icon
+              icon="smile-beam"
+              class="ml-1"
+              spin
+            >
+            </font-awesome-icon>
+          </b-btn>
+        </b-col>
+        <b-col v-if="!loading" class="mt-4">
+          <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
+          <b-btn
+            v-for="(sp, si) in selectedParticipants"
+            class="mr-1"
+            size="sm"
+            variant="dark"
+            :key="`selected-participant-${si}`"
+            @click="removeUser(sp, si)"
+          >
+            {{ sp }}
+            <font-awesome-icon icon="times"></font-awesome-icon>
+          </b-btn>
+          <b-btn
+            v-if="selectedParticipants.length"
+            size="sm"
+            variant="danger"
+            @click="removeAllUsers()"
+          >
+            Fjern alle
+          </b-btn>
+        </b-col>
+        <b-col
+          sm="12"
+          class="text-center mt-3"
+        >
+          <b-btn v-if="selectedParticipants.length > 1" class="mt-2" variant="success" size="lg" :disabled="loading === true" @click="selectRandom()">
+            Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
+          </b-btn>
+        </b-col>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
 // @ is an alias to /src
@@ -296,6 +293,25 @@ export default {
   animation: 1.2s rotation infinite linear;
   position: absolute;
 }
+
+.hero {
+  min-height: 30vh;
+}
+
+.sentence::first-letter {
+  color: #02A5E2;
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+/* .sentence::before {
+  content: '"';
+  font-size: 8rem;
+  position: absolute;
+  top: -6%;
+  left: -3%;
+  color: #ddd;
+} */
 
 @keyframes rotation {
   from {

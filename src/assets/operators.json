@@ -25,6 +25,13 @@
    "class": "operator-business",
    "avatar": "man.png",
    "voice": "Swedish Male",
-   "pitch": 1.0
+   "pitch": 1.2
+ },
+  {
+   "name": "Børre",
+   "class": "operator-borre",
+   "avatar": "standup-borre.png",
+   "voice": "Norwegian Male",
+   "pitch": 1.4
   }
 ]
