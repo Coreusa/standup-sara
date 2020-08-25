@@ -73,7 +73,7 @@
         v-if="selectedParticipants.length"
         size="sm"
         variant="danger"
-        @click="selectedParticipants = []"
+        @click="removeAllUsers()"
       >
         Fjern alle
       </b-btn>
@@ -210,6 +210,8 @@ export default {
     },
     addAllUsers () {
       this.selectedParticipants = this.participants
+      this.participants = []
+      this.everyoneAdded = true
     },
     random (max = 10) {
       // TODO: Invalid when max is 1
@@ -218,6 +220,10 @@ export default {
     removeUser (user, index) {
       this.selectedParticipants.splice(index, 1)
       this.participants.push(user)
+    },
+    removeAllUsers () {
+      this.selectedParticipants = []
+      this.participants = Participants
     },
     selectRandom () {
       this.loading = true
