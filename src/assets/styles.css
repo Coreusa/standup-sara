@@ -5,7 +5,7 @@ body {
   height: 100vh;
   text-align: center;
   font-family: "PT Serif", Helvetica, "Open Sans", serif !important;
-  background: url('/static/background.png') bottom left no-repeat transparent;
+  background: url('/static/background-blue.png') bottom left no-repeat transparent;
   background-size: contain;
 }
 
