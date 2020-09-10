@@ -78,6 +78,28 @@
             >
             </font-awesome-icon>
           </b-btn>
+          <div class="mt-3">
+            <b-btn
+              variant="dark"
+              size="sm"
+              :disabled="loading"
+              @click="displayCustom = !displayCustom"
+            >
+              Egendefinert
+            </b-btn>
+            <b-input-group v-if="displayCustom" size="sm" class="text-right mt-2">
+              <b-input v-model="customName" placeholder="Navn..." :state="customName.length > 1">
+              </b-input>
+              <b-input-group-append>
+                <b-btn variant="success" @click="addCustomUser()">
+                  Legg til
+                </b-btn>
+              </b-input-group-append>
+            </b-input-group>
+            <b-alert :show="error" size="sm" variant="danger">
+              {{ error }}
+            </b-alert>
+          </div>
         </b-col>
         <b-col v-if="!loading" class="mt-4">
           <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
@@ -133,6 +155,7 @@ export default {
       introSentences: Sentences.intro,
       loadingSentences: Sentences.loading,
       addedSentences: Sentences.added,
+      modifiers: Sentences.modifiers,
       operators: Operators,
       loading: false,
       voiceRate: 0.9,
@@ -252,6 +275,7 @@ export default {
       // Determine direction and order of users
       const turnType = this.fisherYates(this.turnTypes)[0]
       const shuffled = this.fisherYates(this.selectedParticipants)
+      const modifiersEnabled = (Math.random() * 100)
       let sentence = ''
       switch (turnType) {
         case 'direction':
@@ -271,6 +295,11 @@ export default {
           break
       }
 
+      if (modifiersEnabled > 60) {
+        let modifier = this.fisherYates(this.modifiers)[0]
+        sentence += `Vi gjør det litt annerledes i dag! Alt foregår på ${modifier.type}! ${modifier.text}!`
+      }
+
       const onLoadingSentenceCompleted = () => {
         setTimeout(() => {
           this.sentence = sentence
@@ -282,8 +311,11 @@ export default {
 
       let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
       this.sentence = selectedLoadingSentence.text || selectedLoadingSentence
-      this.sentenceStyle = selectedLoadingSentence.style || {}
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch, onend: onLoadingSentenceCompleted })
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, {
+        rate: this.voiceRate,
+        pitch: this.operator.pitch,
+        onend: onLoadingSentenceCompleted
+      })
     }
   }
 }

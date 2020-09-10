@@ -79,5 +79,27 @@
 		"Kan jeg få en applaus for {name}?",
 		"{name} spanderer neste runde.",
 		"Åja, så {name} har våknet endelig?"
-	]
+	],
+  "modifiers": [
+    {
+     "type": "rim",
+     "text": "Vi har en ekstra bonus. Alle stand-up skal i dag foregå på rim!"
+    },
+    {
+      "type": "tid",
+      "text": "Hver har 30 sekunder på sin stand-up! KJØR!"
+    },
+    {
+      "type": "svensk",
+      "text": "Alle må snakke svensk i sin stand-up!"
+    },
+    {
+      "type": "engelsk",
+      "text": "Alle må snakke engelsk i sin stand-up!"
+    },
+    {
+      "type": "ghetto",
+      "text": "Alle må snakke ghetto eller osloværing i sin stand-up!"
+    }
+  ]
 }
