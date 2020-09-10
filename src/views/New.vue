@@ -46,6 +46,9 @@
             </div>
           </b-col>
         </div>
+        <div class="text-right mt-1">
+          <small>Versjon: {{ appVersion }}</small>
+        </div>
         <b-col class="mt-4">
           <h5>Hvem er med i dag?</h5>
           <p v-if="!participants.length">
