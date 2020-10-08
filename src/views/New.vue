@@ -5,7 +5,8 @@
     >
       <b-col
         sm="12"
-        md="6"
+        md="8"
+        lg="6"
         class="align-content-center justify-items-center mx-auto"
       >
         <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
@@ -35,18 +36,28 @@
             md="7"
             class="d-flex justify-content-center align-items-center"
           >
-            <div class="sentence">
-              <h4>
-                "{{ sentence }}"
-                <span class="spin"></span>
-                <span v-if="loading">
-                  <span class="spin">🤪</span>
-                </span>
-              </h4>
+            <div class="sentence overflow-y-scroll position-relative">
+              "{{ sentence }}"
+              <span class="spin"></span>
+              <span v-if="loading">
+                <span class="spin">🤪</span>
+              </span>
             </div>
           </b-col>
         </div>
-        <div class="text-right mt-1">
+        <div class="d-flex justify-content-between mt-2">
+          <b-btn
+            @click="randomLoadingSentence()"
+            variant="link"
+            title="Ny agent"
+            v-b-tooltip.hover
+            class="p-0 ml-2"
+          >
+            <font-awesome-icon
+              icon="magic"
+            >
+            </font-awesome-icon>
+          </b-btn>
           <small>Versjon: {{ appVersion }}</small>
         </div>
         <b-col class="mt-4">
@@ -130,7 +141,14 @@
           sm="12"
           class="text-center mt-3"
         >
-          <b-btn v-if="selectedParticipants.length > 1" class="mt-2" variant="success" size="lg" :disabled="loading === true" @click="selectRandom()">
+          <b-btn
+            v-if="selectedParticipants.length > 1"
+            class="mt-2"
+            variant="success"
+            size="lg"
+            :disabled="loading === true"
+            @click="selectRandom()"
+          >
             Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
           </b-btn>
         </b-col>
@@ -173,20 +191,12 @@ export default {
       ]
     }
   },
+  created () {
+    window.responsiveVoice.enableWindowClickHook()
+    window.responsiveVoice.enableEstimationTimeout = false
+  },
   mounted () {
-    const selected = this.fisherYates(this.introSentences)[0]
-    let selectedIntro = selected.text || selected
-    this.operator = this.randomOperator(this.operators)
-    if (this.operator.name !== 'Sara') {
-      this.sentence = `Hei. Sara er dessverre ikke her i dag, så dere må ta til takke med meg, ${this.operator.name}. `
-      this.sentence += `Sara bad meg om å si: ${selectedIntro}`
-    } else {
-      this.sentence = selectedIntro
-    }
-    this.sentenceStyle = selected.style || {}
-    window.setTimeout(() => {
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
-    }, 2000)
+    this.randomLoadingSentence()
   },
   computed: {
     participantsSorted () {
@@ -209,10 +219,25 @@ export default {
   watch: {
     // Look for changes in sentence, and speak them
     sentence (d) {
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      // window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
     }
   },
   methods: {
+    randomLoadingSentence () {
+      const selectedIntro = this.fisherYates(this.introSentences)[0]
+      this.operator = this.randomOperator(this.operators)
+      if (this.operator.name !== 'Sara') {
+        this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som styrer balja!`
+        this.sentence += `${selectedIntro}`
+      } else {
+        this.sentence = selectedIntro
+      }
+      // Cancel any playing audio
+      // window.responsiveVoice.cancel()
+      window.setTimeout(() => {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      }, 1200)
+    },
     fisherYates (input) {
       let a = input
       var aLength = a.length
@@ -239,6 +264,9 @@ export default {
         return input[ix]
       }
     },
+    speak () {
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+    },
     addCustomUser () {
       this.error = null
       if (!this.participants.some(e => e.trim().toLowerCase() === this.customName.trim().toLowerCase())) {
@@ -253,11 +281,13 @@ export default {
       this.sentence = user + ' er lagt til.'
       const addedSentence = this.fisherYates(this.addedSentences)[0].replace(/{name}/gi, user)
       this.sentence = addedSentence
+      this.speak()
     },
     addAllUsers () {
       this.selectedParticipants = this.participants.concat(this.selectedParticipants)
       this.participants = []
       this.sentence = 'Søkke ta, hele oppdrettsanlegget er med!'
+      this.speak()
     },
     random (max = 10) {
       // TODO: Invalid when max is 1
@@ -267,11 +297,13 @@ export default {
       this.selectedParticipants.splice(index, 1)
       this.participants.push(user)
       this.sentence = `${user} får ikke være med likevel.`
+      this.speak()
     },
     removeAllUsers () {
       this.participants = this.selectedParticipants.concat(this.participants)
       this.selectedParticipants = []
       this.sentence = 'Hæ, skal ingen være med?'
+      this.speak()
     },
     selectRandom () {
       this.loading = true
@@ -294,31 +326,38 @@ export default {
         case 'backwards':
           let reversed = shuffled
           reversed = reversed.reverse()
-          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, men slik ble det i dag.`
+          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, jaja.`
           break
       }
 
       if (modifiersEnabled > 60) {
         let modifier = this.fisherYates(this.modifiers)[0]
-        sentence += `Vi gjør det litt annerledes i dag! Alt foregår på ${modifier.type}! ${modifier.text}!`
+        sentence += `Vi gjør det litt annerledes i dag, nemlig ${modifier.type}! ${modifier.text}!`
       }
-
       const onLoadingSentenceCompleted = () => {
         setTimeout(() => {
           this.sentence = sentence
-          this.sentenceStyle = {}
           window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
           this.loading = false
-        }, 1500)
+        }, 1000)
       }
 
       let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
-      this.sentence = selectedLoadingSentence.text || selectedLoadingSentence
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, {
-        rate: this.voiceRate,
-        pitch: this.operator.pitch,
-        onend: onLoadingSentenceCompleted
-      })
+      this.sentence = selectedLoadingSentence
+      try {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, {
+          rate: this.voiceRate,
+          pitch: this.operator.pitch,
+          onend: onLoadingSentenceCompleted,
+          onerror: () => {
+            this.loading = false
+            this.sentence = sentence
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
+
     }
   }
 }
@@ -330,13 +369,20 @@ export default {
 }
 
 .hero {
-  min-height: 30vh;
+  height: 200px;
+}
+
+.sentence {
+  font-size: 1.2rem;
+  max-height: 400px;
 }
 
 .sentence::first-letter {
   color: #02A5E2;
   font-size: 4rem;
   font-weight: bold;
+  margin-right: 5px;
+  margin-bottom: 0;
 }
 
 /* .sentence::before {

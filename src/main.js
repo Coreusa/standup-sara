@@ -15,7 +15,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import '@/assets/styles.css'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-library.add(faTimes, faMagic, faCircleNotch, faSmileWink, faSmileBeam, faLaughWink)
+library.add(
+  faTimes,
+  faMagic,
+  faCircleNotch,
+  faSmileWink,
+  faSmileBeam,
+  faLaughWink
+)
 
 Vue.use(BootstrapVue)
 Vue.component('font-awesome-icon', FontAwesomeIcon)

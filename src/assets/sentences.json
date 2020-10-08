@@ -22,12 +22,7 @@
 		"Hvor ble det av ringetonene man kunne bestille på TV?",
 		"Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.",
 		"Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!",
-		{
-			"text": "BDO Cert er inne på inspeksjon, de ber oss fortsette som vanlig",
-			"style": {
-				"animation": "cop-lights 1s infinite"
-			}
-		}
+		"BDO Cert er inne på inspeksjon, de ber oss fortsette som vanlig"
 	],
 	"loading": [
 		"La meg spinne tryllestaven min litt, så skal jeg finne ut av det!",
@@ -35,17 +30,18 @@
 		"Denne er kjempelett! Klarer du å gjette rekkefølgen?",
 		"Visste du at Robert Kearns oppfant vindusviskeren? Jeg sporet av litt, sårri.",
 		"Har du husket å vaske buksene dine?",
-		"Don\"t worry, be happy! Som de sier på Bahamas.",
+		"Dont worry, be happy! Som de sier på Bahamas.",
 		"Hvor lang tid tror du dette tar?",
 		"Surrealismen oppstod rundt 1920.",
 		"Husk å like, dele, abonnerer og Google Plusificate denne siden",
 		"Oppfinnere min lar meg si mange rare ting. For eksempel: Bak skyene er himmelen alltid blå",
 		"Steike, her var det litt å velge blant. Skal vi se, skal vi sjå. Buksa på.",
 		"Da legger jeg navnene inn i snurremaskinen. Weeeee, rundt og rundt. Spennende.",
-		"Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?",
 		"Har ikke disse vært med før?",
 		"Håper jeg ikke føkker dette opp.",
+		"Visste du at Krone-isen opprinnelig het Diplomat og kostet 75 øre?",
 		"Hva heter den lengste siden i en rettvinklet trekant?",
+		"Humm. Jeg blir ikke helt enig med meg selv. Kanskje han skal starte...eller henne?",
 		"De fire store innenfor norsk litteratur er Ibsen, Bjørnson, Kielland og Lie",
 		"Visste du at bokmålets far var Knud Knudsen?",
 		"Hva er et primtall?",
@@ -54,13 +50,7 @@
 		"Denne var litt tricky! Her må jeg frem med matteboken, vent litt!",
 		"Lottotrekning!",
 		"Denne må jeg tenke litt på. Tvinne tomler. Tvinne tomler. Tvinne tomler. Ok, har det!",
-		"Helt urelatert, men den verdenskjente vitenskapsmannen Neil deGrasse Tyson var en gang en ubeseiret wrestler",
-		{
-			"text": "I dag tenkt - Oisann beklager! Jeg har sølt maling.",
-			"style": {
-				"color": "green"
-			}
-		}
+		"Helt urelatert, men den verdenskjente vitenskapsmannen Neil deGrasse Tyson var en gang en ubeseiret wrestler"
 	],
 	"added": [
 		"{name} er på plass.",
@@ -91,15 +81,15 @@
     },
     {
       "type": "svensk",
-      "text": "Alle må snakke svensk i sin stand-up!"
+      "text": "Prøv å snakke svensk!"
     },
     {
       "type": "engelsk",
-      "text": "Alle må snakke engelsk i sin stand-up!"
+      "text": "Prøv å snakke engelsk!"
     },
     {
       "type": "ghetto",
-      "text": "Alle må snakke ghetto eller osloværing i sin stand-up!"
+      "text": "Prøv å snakke ghetto eller oslo-væring!"
     }
   ]
 }
