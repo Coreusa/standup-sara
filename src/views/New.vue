@@ -34,14 +34,19 @@
           <b-col
             sm="12"
             md="7"
-            class="d-flex justify-content-center align-items-center"
+            class="d-flex align-items-center position-relative"
           >
-            <div class="sentence overflow-y-scroll position-relative">
-              "{{ sentence }}"
-              <span class="spin"></span>
-              <span v-if="loading">
-                <span class="spin">🤪</span>
+            <div
+              v-if="loading"
+              class="position-absolute top-right"
+            >
+              <span class="font-italic">
+                Sara tenker...
               </span>
+              <span class="spin">🤪</span>
+            </div>
+            <div class="sentence">
+              "{{ sentence }}"
             </div>
           </b-col>
         </div>
@@ -228,7 +233,7 @@ export default {
       this.operator = this.randomOperator(this.operators)
       if (this.operator.name !== 'Sara') {
         this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som styrer balja!`
-        this.sentence += `${selectedIntro}`
+        this.sentence += ` ${selectedIntro}`
       } else {
         this.sentence = selectedIntro
       }
@@ -357,7 +362,6 @@ export default {
       } catch (e) {
         console.log(e)
       }
-
     }
   }
 }
@@ -369,20 +373,20 @@ export default {
 }
 
 .hero {
-  height: 200px;
+  height: 250px;
 }
 
 .sentence {
   font-size: 1.2rem;
-  max-height: 400px;
+  /* min-height: 200px; */
 }
 
 .sentence::first-letter {
   color: #02A5E2;
   font-size: 4rem;
   font-weight: bold;
-  margin-right: 5px;
-  margin-bottom: 0;
+  margin-right: -1px;
+  line-height: 1;
 }
 
 /* .sentence::before {
@@ -391,7 +395,7 @@ export default {
   position: absolute;
   top: -6%;
   left: -3%;
-  color: #ddd;
+  color: #02A5E2;
 } */
 
 @keyframes rotation {
