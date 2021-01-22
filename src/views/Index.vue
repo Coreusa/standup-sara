@@ -219,7 +219,8 @@ export default {
   computed: {
     participantsSorted () {
       // Avoid some unexpected side-effects.
-      return this.participants.sort((a, b) => a.localeCompare(b))
+      const temp = this.participants
+      return temp.sort((a, b) => a.localeCompare(b))
     },
     selectedOperator () {
       if (this.operator) {
