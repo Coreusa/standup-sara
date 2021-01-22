@@ -1,120 +1,178 @@
 <template>
-<div class="row no-gutters mx-auto">
-  <div class="col-12 mb-5 text-center">
-    <h1>
-      Velkommen til Stand-up Sara!
-    </h1>
-  </div>
-  <b-card class="col-12 col-md-5 bg-light text-left">
-    <h5>Hvem er med i dag?</h5>
-    <b-btn
-      v-for="(p, i) in participants"
-      size="sm"
-      variant="primary"
-      class="mr-2"
-      :key="`participant-${i}`"
-      :disabled="loading"
-      @click="addUser(p, i)"
+  <b-container fluid>
+    <b-row
+      class="d-flex align-content-center justify-items-center"
     >
-      {{ p }}
-    </b-btn>
-    <b-btn
-      v-if="participants.length"
-      size="sm"
-      variant="success"
-      class="mr-2"
-      :disabled="loading"
-      @click="addAllUsers()"
-    >
-      Alle!
-      <font-awesome-icon
-        icon="smile-beam"
-        class="ml-1"
-        spin
+      <b-col
+        sm="12"
+        md="8"
+        lg="6"
+        class="align-content-center justify-items-center mx-auto"
       >
-      </font-awesome-icon>
-    </b-btn>
-    <div class="mt-3">
-      <b-btn
-        variant="dark"
-        size="sm"
-        :disabled="loading"
-        @click="displayCustom = !displayCustom"
-      >
-        Egendefinert
-      </b-btn>
-      <b-input-group v-if="displayCustom" size="sm" class="text-right mt-2">
-        <b-input v-model="customName" placeholder="Navn..." :state="customName.length > 1">
-        </b-input>
-        <b-input-group-append>
-          <b-btn variant="success" @click="addCustomUser()">
-            Legg til
+        <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
+        <!-- Operator block -->
+        <div class="bg-light p-3 rounded d-flex shadow hero position-relative">
+          <div
+            v-if="operator"
+            :class="operator.class"
+            class="operator position-absolute bottom-right"
+          >
+          </div>
+          <b-col
+            sm="12"
+            md="7"
+            class="d-flex align-items-center position-relative"
+          >
+            <div class="sentence">
+              "{{ sentence }}"
+            </div>
+          </b-col>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+          <b-btn
+            @click="randomLoadingSentence()"
+            variant="link"
+            :disabled="loading"
+            title="Ny agent"
+            v-b-tooltip.hover
+            class="p-0 ml-2"
+          >
+            <font-awesome-icon
+              icon="magic"
+            >
+            </font-awesome-icon>
           </b-btn>
-        </b-input-group-append>
-      </b-input-group>
-      <b-alert :show="error" size="sm" variant="danger">
-        {{ error }}
-      </b-alert>
-    </div>
-  </b-card>
-  <b-card class="col-12 col-md-5 offset-md-2 text-left">
-    <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
-    <font-awesome-icon
-      v-if="loading"
-      icon="circle-notch"
-      class="mr-2"
-      spin
-    >
-    </font-awesome-icon>
-    <span v-if="loading">Sara tenker...</span>
-    <div v-else>
-      <b-btn
-        v-for="(sp, si) in selectedParticipants"
-        class="mx-1"
-        size="sm"
-        variant="dark"
-        :key="`selected-participant-${si}`"
-        @click="removeUser(sp, si)"
-      >
-        {{ sp }}
-        <font-awesome-icon icon="times"></font-awesome-icon>
-      </b-btn>
-      <b-btn
-        v-if="selectedParticipants.length"
-        size="sm"
-        variant="danger"
-        @click="removeAllUsers()"
-      >
-        Fjern alle
-      </b-btn>
-    </div>
-  </b-card>
-  <div class="col-12 text-center">
-    <b-btn v-if="selectedParticipants.length > 1" class="mt-2" variant="success" size="lg" :disabled="loading === true" @click="selectRandom()">
-      Hvem starter, Sara? <font-awesome-icon icon="magic"></font-awesome-icon>
-    </b-btn>
-  </div>
-  <div
-    v-if="operator"
-    :class="operator.class"
-    class="operator position-fixed bottom-right"
-  >
-    <div class="col-12 sara-dialogue text-center position-absolute">
-      <div class="chat-bubble mt-2">
-        <h3 class="mt-2">
-          <span :style="sentenceStyle">{{ sentence }}</span>
-          <span class="spin"></span>
-          <span v-if="loading">
+          <small>Versjon: {{ appVersion }}</small>
+        </div>
+        <b-row>
+          <b-col
+            v-if="!loading"
+            class="mt-4"
+          >
+            <h5>Hvem er med i dag?</h5>
+            <div
+              v-if="!participants.length"
+              class="font-italic"
+            >
+              Alle er valgt.
+            </div>
+            <!-- Display available users to select -->
+            <b-list-group
+              v-if="participants.length"
+              class="user-list overflow-y-scroll"
+            >
+              <b-list-group-item
+                v-if="participants.length"
+                :disabled="loading"
+                @click="addAllUsers()"
+              >
+                <div class="text-green">
+                  Velg alle
+                  <font-awesome-icon
+                    icon="smile-beam"
+                    class="ml-1"
+                    spin
+                  />
+                </div>
+              </b-list-group-item>
+              <b-list-group-item
+                v-for="(p, i) in participantsSorted"
+                :key="`user-${i}`"
+                :disabled="loading"
+                @click="addUser(p, i)"
+              >
+                {{ p }}
+              </b-list-group-item>
+            </b-list-group>
+            <!-- Custom name block -->
+            <div class="mt-3">
+              <b-btn
+                variant="dark"
+                size="sm"
+                :disabled="loading"
+                @click="displayCustom = !displayCustom"
+              >
+                Egendefinert
+              </b-btn>
+              <b-input-group v-if="displayCustom" size="sm" class="text-right mt-2">
+                <b-input v-model="customName" placeholder="Navn..." :state="customName.length > 1">
+                </b-input>
+                <b-input-group-append>
+                  <b-btn variant="success" @click="addCustomUser()">
+                    Legg til
+                  </b-btn>
+                </b-input-group-append>
+              </b-input-group>
+              <b-alert :show="error" size="sm" variant="danger">
+                {{ error }}
+              </b-alert>
+            </div>
+          </b-col>
+          <!-- Selected users block -->
+          <b-col
+            v-if="!loading"
+            class="mt-4"
+          >
+            <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
+            <b-list-group
+              v-if="selectedParticipants.length"
+              class="user-list overflow-y-scroll"
+            >
+              <b-list-group-item
+                v-if="selectedParticipants.length"
+                @click="removeAllUsers()"
+              >
+                <div class="text-red">
+                  <font-awesome-icon
+                    class="mr-2"
+                    icon="times"
+                  />
+                  Fjern alle
+                </div>
+              </b-list-group-item>
+              <b-list-group-item
+                v-for="(sp, si) in selectedParticipants"
+                :key="`selected-user-${si}`"
+                @click="removeUser(sp, si)"
+              >
+                <div class="text-green">
+                  <font-awesome-icon
+                    class="mr-2"
+                    icon="times"
+                  />
+                  {{ sp }}
+                </div>
+              </b-list-group-item>
+            </b-list-group>
+          </b-col>
+        </b-row>
+        <!-- Find user sequence block -->
+        <b-col
+          sm="12"
+          class="text-center mt-3"
+        >
+          <div
+            v-if="loading"
+          >
+            <span class="font-italic">
+              Sara tenker...
+            </span>
             <span class="spin">🤪</span>
-          </span>
-        </h3>
-      </div>
-      <div class="app-version">
-        Versjon <strong>{{ appVersion }}</strong>
-      </div>
-    </div>
-  </div>
-</div>
+          </div>
+          <b-btn
+            v-if="selectedParticipants.length > 1"
+            class="mt-3"
+            variant="success"
+            size="lg"
+            :disabled="loading === true"
+            @click="selectRandom()"
+          >
+            Hvem starter, {{ operator.name }}? <font-awesome-icon icon="magic"></font-awesome-icon>
+          </b-btn>
+        </b-col>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 <script>
 // @ is an alias to /src
@@ -136,6 +194,7 @@ export default {
       introSentences: Sentences.intro,
       loadingSentences: Sentences.loading,
       addedSentences: Sentences.added,
+      modifiers: Sentences.modifiers,
       operators: Operators,
       loading: false,
       voiceRate: 0.9,
@@ -150,27 +209,17 @@ export default {
       ]
     }
   },
+  created () {
+    window.responsiveVoice.enableWindowClickHook()
+    window.responsiveVoice.enableEstimationTimeout = false
+  },
   mounted () {
-    const selected = this.fisherYates(this.introSentences)[0]
-    let selectedIntro = selected.text || selected
-    this.operator = this.randomOperator(this.operators)
-    if (this.operator.name !== 'Sara') {
-      this.sentence = `Hei. Sara er dessverre ikke her i dag, så dere må ta til takke med meg, ${this.operator.name}. `
-      this.sentence += `Sara bad meg om å si: ${selectedIntro}`
-    } else {
-      this.sentence = selectedIntro
-    }
-    this.sentenceStyle = selected.style || {}
-    window.setTimeout(() => {
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
-    }, 2000)
+    this.randomLoadingSentence()
   },
   computed: {
     participantsSorted () {
       // Avoid some unexpected side-effects.
-      let temp = this.participants
-      temp = temp.sort((a, b) => a.toLowerCase() > b.toLowerCase())
-      return temp
+      return this.participants.sort((a, b) => a.localeCompare(b))
     },
     selectedOperator () {
       if (this.operator) {
@@ -186,10 +235,25 @@ export default {
   watch: {
     // Look for changes in sentence, and speak them
     sentence (d) {
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      // window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
     }
   },
   methods: {
+    randomLoadingSentence () {
+      const selectedIntro = this.fisherYates(this.introSentences)[0]
+      this.operator = this.randomOperator(this.operators)
+      if (this.operator.name !== 'Sara') {
+        this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som styrer balja!`
+        this.sentence += ` ${selectedIntro}`
+      } else {
+        this.sentence = selectedIntro
+      }
+      // Cancel any playing audio
+      // window.responsiveVoice.cancel()
+      window.setTimeout(() => {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      }, 1200)
+    },
     fisherYates (input) {
       let a = input
       var aLength = a.length
@@ -216,6 +280,9 @@ export default {
         return input[ix]
       }
     },
+    speak () {
+      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+    },
     addCustomUser () {
       this.error = null
       if (!this.participants.some(e => e.trim().toLowerCase() === this.customName.trim().toLowerCase())) {
@@ -230,11 +297,13 @@ export default {
       this.sentence = user + ' er lagt til.'
       const addedSentence = this.fisherYates(this.addedSentences)[0].replace(/{name}/gi, user)
       this.sentence = addedSentence
+      this.speak()
     },
     addAllUsers () {
       this.selectedParticipants = this.participants.concat(this.selectedParticipants)
       this.participants = []
       this.sentence = 'Søkke ta, hele oppdrettsanlegget er med!'
+      this.speak()
     },
     random (max = 10) {
       // TODO: Invalid when max is 1
@@ -244,17 +313,20 @@ export default {
       this.selectedParticipants.splice(index, 1)
       this.participants.push(user)
       this.sentence = `${user} får ikke være med likevel.`
+      this.speak()
     },
     removeAllUsers () {
       this.participants = this.selectedParticipants.concat(this.participants)
       this.selectedParticipants = []
       this.sentence = 'Hæ, skal ingen være med?'
+      this.speak()
     },
     selectRandom () {
       this.loading = true
       // Determine direction and order of users
       const turnType = this.fisherYates(this.turnTypes)[0]
       const shuffled = this.fisherYates(this.selectedParticipants)
+      const modifiersEnabled = (Math.random() * 100)
       let sentence = ''
       switch (turnType) {
         case 'direction':
@@ -270,23 +342,37 @@ export default {
         case 'backwards':
           let reversed = shuffled
           reversed = reversed.reverse()
-          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, men slik ble det i dag.`
+          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, jaja.`
           break
       }
 
+      if (modifiersEnabled > 60) {
+        let modifier = this.fisherYates(this.modifiers)[0]
+        sentence += `Vi gjør det litt annerledes i dag, nemlig ${modifier.type}! ${modifier.text}!`
+      }
       const onLoadingSentenceCompleted = () => {
         setTimeout(() => {
           this.sentence = sentence
-          this.sentenceStyle = {}
           window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
           this.loading = false
-        }, 1500)
+        }, 1000)
       }
 
       let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
-      this.sentence = selectedLoadingSentence.text || selectedLoadingSentence
-      this.sentenceStyle = selectedLoadingSentence.style || {}
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch, onend: onLoadingSentenceCompleted })
+      this.sentence = selectedLoadingSentence
+      try {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, {
+          rate: this.voiceRate,
+          pitch: this.operator.pitch,
+          onend: onLoadingSentenceCompleted,
+          onerror: () => {
+            this.loading = false
+            this.sentence = sentence
+          }
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   }
 }
@@ -296,6 +382,45 @@ export default {
   animation: 1.2s rotation infinite linear;
   position: absolute;
 }
+
+.hero {
+  height: 250px;
+}
+
+.sentence {
+  font-size: 1.2rem;
+  /* min-height: 200px; */
+}
+
+.sentence::first-letter {
+  color: #02A5E2;
+  font-size: 4rem;
+  font-weight: bold;
+  margin-right: -1px;
+  line-height: 1;
+}
+
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
+.user-list {
+  max-height: 250px;
+}
+
+.user-list > div:hover {
+  cursor: pointer;
+  background: #eee;
+}
+
+/* .sentence::before {
+  content: '"';
+  font-size: 8rem;
+  position: absolute;
+  top: -6%;
+  left: -3%;
+  color: #02A5E2;
+} */
 
 @keyframes rotation {
   from {

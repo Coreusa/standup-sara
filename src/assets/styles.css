@@ -17,6 +17,10 @@ body {
   background: url('/static/standup-sara.png') bottom right no-repeat transparent;
 }
 
+.operator-sandra {
+  background: url('/static/standup-sandra.png') bottom right no-repeat transparent;
+}
+
 .operator-stein {
   background: url('/static/standup-stein.png') bottom right no-repeat transparent;
 }
@@ -107,6 +111,18 @@ body {
 
 .text-large {
   font-size: 2rem;
+}
+
+.text-green {
+  color: #218f8b
+}
+
+.text-blue {
+  color: #02a5e2
+}
+
+.text-red {
+  color: #ed1a3b
 }
 
 @keyframes cop-lights {

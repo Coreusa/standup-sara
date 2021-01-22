@@ -28,6 +28,13 @@
    "pitch": 1.2
  },
   {
+   "name": "Sandra",
+   "class": "operator-sandra",
+   "avatar": "standup-sandra.png",
+   "voice": "Swedish Female",
+   "pitch": 1.0
+ },
+  {
    "name": "Børre",
    "class": "operator-borre",
    "avatar": "standup-borre.png",
