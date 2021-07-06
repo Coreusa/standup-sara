@@ -9,6 +9,10 @@ body {
   background-size: contain;
 }
 
+.bg-black {
+  background-color: #101010;
+}
+
 .operator {
   background-position: 50% 20%;
   background-size: 80%;
@@ -21,6 +25,14 @@ body {
   background: url('/static/standup-sandra.png') bottom right no-repeat transparent;
 }
 
+.operator-elise {
+  background: url('/static/standup-elise.png') bottom right no-repeat transparent;
+}
+
+.operator-barry {
+  background: url('/static/standup-barry.png') bottom right no-repeat transparent;
+}
+
 .operator-stein {
   background: url('/static/standup-stein.png') bottom right no-repeat transparent;
 }
@@ -31,10 +43,6 @@ body {
 
 .operator-shadow {
   background: url('/static/shadow.png') bottom right no-repeat transparent;
-}
-
-.operator-borre {
-  background: url('/static/standup-borre.png') bottom right no-repeat transparent;
 }
 
 .container-fluid {

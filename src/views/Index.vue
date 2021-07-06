@@ -1,5 +1,8 @@
 <template>
-  <b-container fluid>
+  <b-container
+    fluid
+    :class="operator && operator.name.toLowerCase() === 'shadow' ? 'bg-black text-light' : ''"
+  >
     <b-row
       class="d-flex align-content-center justify-items-center"
     >
@@ -9,9 +12,20 @@
         lg="6"
         class="align-content-center justify-items-center mx-auto"
       >
-        <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
+        <div
+          v-if="operator && operator.name.toLowerCase() === 'shadow'"
+          class="glitch-wrapper"
+        >
+          <h1 class="glitch mb-5" data-text="̗̙̤̞͉̞̰̱̦̠͖̱̯̅̈́͐̈́̓̂̆̀̓͘̚ͅŞ̵̖̜̥̯͋ͅḩ̸̝̺̙̻͙͖͉͍̈́̋͛͌͊͂̊͆͗̅̊à̵̡̛͉̼͚̩̜̻̯͇͓͉͙̖̉̎̔̽̈͗͐̓̊͝͝͝͠ͅd̶̛̘̝͇̺̲͕͎͕͉̩̠̪̳̹͈̱͗̃̑͋͑̅͝o̵̡͈͚̟͕͉̝̰̬̖͗̇̓̔̔̋̽̂ͅw̴̙̤̱̜̣͙̥̗̞̙̜̗̞͒̀͜ͅ ̸̪̉e̸̱͖͖̼̟̤̊͋̆̃̑̃̓͒̃͛̒͑̈̚͝͠ȑ̴̢̜͓̦̇͑̓̀͋̃̄͝ ̸̡̢̦̱͎̪̫̞̤̠̹͚̣̞̗̔̒̚̚h̷̠̝̹̙͚̘̣̓̎̈́̓̏̔̄̆̐͘ͅḙ̸̡̛̭̩͔͓̹̮̳̅̑̓̓̋̿̑̓͒͘͝͝r̸̠̗͉̦̱̊͒̆̿̃͂̑́͑̈́̌͊̀̋͝"></h1>
+        </div>
+        <div v-else>
+          <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
+        </div>
         <!-- Operator block -->
-        <div class="bg-light p-3 rounded d-flex shadow hero position-relative">
+        <div
+          class="p-3 rounded d-flex shadow hero position-relative"
+          :class="operator && operator.name.toLowerCase() === 'shadow' ? 'bg-black' : 'bg-light'"
+        >
           <div
             v-if="operator"
             :class="operator.class"
@@ -80,6 +94,7 @@
                 :key="`user-${i}`"
                 :disabled="loading"
                 @click="addUser(p, i)"
+                class="bg-none text-dark"
               >
                 {{ p }}
               </b-list-group-item>
@@ -155,7 +170,7 @@
             v-if="loading"
           >
             <span class="font-italic">
-              Sara tenker...
+              {{ `${operator.name} tenker...` }}
             </span>
             <span class="spin">🤪</span>
           </div>
@@ -167,7 +182,8 @@
             :disabled="loading === true"
             @click="selectRandom()"
           >
-            Hvem starter, {{ operator.name }}? <font-awesome-icon icon="magic"></font-awesome-icon>
+            {{ operator.name.toLowerCase() === 'shadow' ? 'Hack!' : `Hvem starter, ${operator.name}?` }}
+            <font-awesome-icon icon="magic"></font-awesome-icon>
           </b-btn>
         </b-col>
       </b-col>
@@ -231,6 +247,13 @@ export default {
     },
     originalParticipants () {
       return Participants
+    },
+    operatorName () {
+      if (this.operator) {
+        return this.operator.name
+      } else {
+        return ''
+      }
     }
   },
   watch: {
@@ -243,9 +266,15 @@ export default {
     randomLoadingSentence () {
       const selectedIntro = this.fisherYates(this.introSentences)[0]
       this.operator = this.randomOperator(this.operators)
-      if (this.operator.name !== 'Sara') {
-        this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som styrer balja!`
-        this.sentence += ` ${selectedIntro}`
+      const operatorName = this.operator.name.toLowerCase()
+      if (operatorName !== 'sara') {
+        if (operatorName === 'shadow') {
+          const drive = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase()
+          this.sentence = `Endelig! Nå eier jeg PC-en din. Sletter ${drive} kolon....vent litt...`
+        } else {
+          this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som får herje!`
+          this.sentence += ` ${selectedIntro}`
+        }
       } else {
         this.sentence = selectedIntro
       }
@@ -296,7 +325,12 @@ export default {
       this.participants.splice(index, 1)
       this.selectedParticipants.push(user)
       this.sentence = user + ' er lagt til.'
-      const addedSentence = this.fisherYates(this.addedSentences)[0].replace(/{name}/gi, user)
+      let addedSentence = ''
+      if (this.operator.name.toLowerCase() === 'shadow') {
+        addedSentence = `Hacker ${user}. Skaaaal vi se. Der ja! Hacket og Eid! Lett.`
+      } else {
+        addedSentence = this.fisherYates(this.addedSentences)[0].replace(/{name}/gi, user)
+      }
       this.sentence = addedSentence
       this.speak()
     },
@@ -313,7 +347,11 @@ export default {
     removeUser (user, index) {
       this.selectedParticipants.splice(index, 1)
       this.participants.push(user)
-      this.sentence = `${user} får ikke være med likevel.`
+      if (this.operator.name.toLowerCase() === 'shadow') {
+        this.sentence = `${user} var ikke så interessant å hacke likevel.`
+      } else {
+        this.sentence = `${user} får ikke være med likevel.`
+      }
       this.speak()
     },
     removeAllUsers () {
@@ -378,7 +416,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style lang="less" scoped>
 .spin {
   animation: 1.2s rotation infinite linear;
   position: absolute;
@@ -414,15 +452,6 @@ export default {
   background: #eee;
 }
 
-/* .sentence::before {
-  content: '"';
-  font-size: 8rem;
-  position: absolute;
-  top: -6%;
-  left: -3%;
-  color: #02A5E2;
-} */
-
 @keyframes rotation {
   from {
     transform: rotate(0deg);
@@ -432,5 +461,4 @@ export default {
     transform: rotate(359deg);
   }
 }
-
 </style>

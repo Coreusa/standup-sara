@@ -14,17 +14,22 @@
 		"Tenke, tenke tenke! Å nei, jernteppe! Neida, tøysa!",
 		"Oi, oi oi! I dag var det mange flotte klesplagg!",
 		"Håper lottomaskinen fungerer i dag.",
+    "Hvorfor bruker man en banan for å måle ting?",
 		"Aldri la trommisen håndtere pengene i bandet.",
+		"Mon tro hvem som vinner neste Fotball-VM?",
+		"Mon tro hvem som vinner neste Fotball-EM?",
 		"Idag skal jeg tøyse med alle variablene i koden min. Hva skjer hvis jeg setter denne til 'false'?",
 		"Kanskje jeg skal farge håret blått? Eller grønt?",
 		"Visste du at du kan finne ut alderen på en hest ved å se på tennene til den?",
 		"Dans, dans, dans oppå bordet. Legg deg ned, på gølvet.",
 		"Av og til glemmer mine slaver å oppdatere versjonen min. Helt utrolig!",
 		"Jeg kan over en fantasillion uttrykk!",
+    "Podcaster kommer til å bli betalvare de også, dessverre.",
+    "Idag skal jeg lese en bok, tror jeg. Eller to. Nei, vent. Lydbok!",
 		"Hvor ble det av ringetonene man kunne bestille på TV?",
 		"Å nei! Jeg har mistet tryllestaven min! Neida. Jeg bare tullet.",
 		"Jeg tror det er meldt sol og litt skyer i dag. Jaja, det stopper ikke stænd up!",
-		"BDO Cert er inne på inspeksjon, de ber oss fortsette som vanlig"
+		"BDO Cert er på inspeksjon, steng torrent-serveren!"
 	],
 	"loading": [
 		"La meg spinne tryllestaven min litt, så skal jeg finne ut av det!",
@@ -88,7 +93,7 @@
   "modifiers": [
     {
      "type": "rim",
-     "text": "Lykke til!"
+     "text": "Prøv å legge inn et rim eller to!"
     },
     {
       "type": "tid",
@@ -105,6 +110,18 @@
     {
       "type": "ghetto",
       "text": "Prøv å snakke ghetto eller oslo-væring!"
+    },
+    {
+      "type": "etterligning",
+      "text": "Prøv å snakke som en av de andre til stede!"
+    },
+    {
+      "type": "tidsreise",
+      "text": "Ta med hva du skal gjøre imorgen!"
+    },
+    {
+      "type": "veldig kort",
+      "text": "Prøv å ta stand-up med færrest mulig ord."
     }
   ]
 }

@@ -7,6 +7,13 @@
    "pitch": 1.0
   },
   {
+   "name": "Elise",
+   "class": "operator-elise",
+   "avatar": "standup-elise.png",
+   "voice": "Norwegian Female",
+   "pitch": 0.9
+  },
+  {
    "name": "Stand-up Stein",
    "class": "operator-stein",
    "avatar": "standup-stein.png",
@@ -14,11 +21,18 @@
    "pitch": 1.0
   },
   {
+   "name": "Stand-up Barry",
+   "class": "operator-barry",
+   "avatar": "standup-barry.png",
+   "voice": "Norwegian Male",
+   "pitch": 0.9
+  },
+  {
    "name": "Shadow",
    "class": "operator-shadow",
    "avatar": "shadow.png",
    "voice": "Norwegian Male",
-   "pitch": 0.9
+   "pitch": 0.6
   },
   {
    "name": "Businessmann",
@@ -33,12 +47,5 @@
    "avatar": "standup-sandra.png",
    "voice": "Swedish Female",
    "pitch": 1.0
- },
-  {
-   "name": "Børre",
-   "class": "operator-borre",
-   "avatar": "standup-borre.png",
-   "voice": "Norwegian Male",
-   "pitch": 1.4
-  }
+ }
 ]
