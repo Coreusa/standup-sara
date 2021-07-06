@@ -64,7 +64,7 @@
         <b-row>
           <b-col
             v-if="!loading"
-            class="mt-4"
+            class="text-light mt-4"
           >
             <h5>Hvem er med i dag?</h5>
             <div
@@ -129,9 +129,13 @@
           <!-- Selected users block -->
           <b-col
             v-if="!loading"
-            class="mt-4"
+            class="text-light mt-4"
           >
-            <h5 v-if="selectedParticipants.length">{{ `${selectedParticipants.length} valgt`}}</h5>
+            <h5
+              v-if="selectedParticipants.length"
+            >
+              {{ `${selectedParticipants.length} valgt`}}
+            </h5>
             <b-list-group
               v-if="selectedParticipants.length"
               class="user-list overflow-y-scroll"
