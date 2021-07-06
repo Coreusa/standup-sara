@@ -24,7 +24,7 @@
    "name": "Stand-up Barry",
    "class": "operator-barry",
    "avatar": "standup-barry.png",
-   "voice": "Norwegian Male",
+   "voice": "US English Male",
    "pitch": 0.9
   },
   {
@@ -45,7 +45,7 @@
    "name": "Sandra",
    "class": "operator-sandra",
    "avatar": "standup-sandra.png",
-   "voice": "Swedish Female",
+   "voice": "Danish Female",
    "pitch": 1.0
  }
 ]
