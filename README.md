@@ -1,8 +1,8 @@
 # Stand-up Sara
-![image](https://i.imgur.com/BwJXZpm.png)
-Stand-up Sara is a low-key, unofficial tool to hopefully ease stand-ups by allowing automated selections, ordering and even some wildcard events. It can be used by anyone in BDO.
+![image](https://i.imgur.com/SbATlaX.png)
+Stand-up Sara is a low-key, unofficial tool to hopefully ease stand-ups by allowing automated selections, ordering and even some wildcard events. It can be used by anyone.
 
-Try it yourself at Sara's official site: https://sara.bdo.no.
+Try it yourself at Sara's official site: https://polite-forest-02f0f6103.azurestaticapps.net.
 
 ## Project setup
 ```

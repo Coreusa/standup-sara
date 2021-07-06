@@ -1,6 +1,7 @@
 <template>
   <b-container
     fluid
+    class="vh-100"
     :class="operator && operator.name.toLowerCase() === 'shadow' ? 'bg-black text-light' : ''"
   >
     <b-row
@@ -45,16 +46,18 @@
         <div class="d-flex justify-content-between mt-2">
           <b-btn
             @click="randomLoadingSentence()"
-            variant="link"
+            variant="light"
             :disabled="loading"
             title="Ny agent"
             v-b-tooltip.hover
-            class="p-0 ml-2"
+            class="px-3 py-2"
           >
             <font-awesome-icon
               icon="magic"
+              class="mr-2"
             >
             </font-awesome-icon>
+            Tilfeldig agent
           </b-btn>
           <small>Versjon: {{ appVersion }}</small>
         </div>
@@ -183,7 +186,10 @@
             @click="selectRandom()"
           >
             {{ operator.name.toLowerCase() === 'shadow' ? 'Hack!' : `Hvem starter, ${operator.name}?` }}
-            <font-awesome-icon icon="magic"></font-awesome-icon>
+            <font-awesome-icon
+              icon="magic"
+              spin
+            />
           </b-btn>
         </b-col>
       </b-col>
