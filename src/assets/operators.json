@@ -1,27 +1,27 @@
 [
   {
-   "name": "Sara",
+   "name": "Silje",
    "class": "operator-sara",
    "avatar": "standup-sara.png",
    "voice": "Norwegian Female",
    "pitch": 1.0
   },
   {
-   "name": "Elise",
+   "name": "Ellinor",
    "class": "operator-elise",
    "avatar": "standup-elise.png",
    "voice": "Norwegian Female",
    "pitch": 0.9
   },
   {
-   "name": "Stand-up Stein",
+   "name": "Stand-up Sigvard",
    "class": "operator-stein",
    "avatar": "standup-stein.png",
    "voice": "Norwegian Male",
    "pitch": 1.0
   },
   {
-   "name": "Stand-up Barry",
+   "name": "Flynn",
    "class": "operator-barry",
    "avatar": "standup-barry.png",
    "voice": "US English Male",
@@ -42,7 +42,7 @@
    "pitch": 1.2
  },
   {
-   "name": "Sandra",
+   "name": "Sonja",
    "class": "operator-sandra",
    "avatar": "standup-sandra.png",
    "voice": "Danish Female",
