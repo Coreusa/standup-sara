@@ -31,7 +31,7 @@ export default new Vuex.Store({
     },
     removeAllUsers ({ commit }) {
       commit('deleteAllUsers')
-    },
+    }
   },
   mutations: {
     saveUser (state, data) {
