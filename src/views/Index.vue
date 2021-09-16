@@ -20,7 +20,7 @@
           <h1 class="glitch mb-5" data-text="̗̙̤̞͉̞̰̱̦̠͖̱̯̅̈́͐̈́̓̂̆̀̓͘̚ͅŞ̵̖̜̥̯͋ͅḩ̸̝̺̙̻͙͖͉͍̈́̋͛͌͊͂̊͆͗̅̊à̵̡̛͉̼͚̩̜̻̯͇͓͉͙̖̉̎̔̽̈͗͐̓̊͝͝͝͠ͅd̶̛̘̝͇̺̲͕͎͕͉̩̠̪̳̹͈̱͗̃̑͋͑̅͝o̵̡͈͚̟͕͉̝̰̬̖͗̇̓̔̔̋̽̂ͅw̴̙̤̱̜̣͙̥̗̞̙̜̗̞͒̀͜ͅ ̸̪̉e̸̱͖͖̼̟̤̊͋̆̃̑̃̓͒̃͛̒͑̈̚͝͠ȑ̴̢̜͓̦̇͑̓̀͋̃̄͝ ̸̡̢̦̱͎̪̫̞̤̠̹͚̣̞̗̔̒̚̚h̷̠̝̹̙͚̘̣̓̎̈́̓̏̔̄̆̐͘ͅḙ̸̡̛̭̩͔͓̹̮̳̅̑̓̓̋̿̑̓͒͘͝͝r̸̠̗͉̦̱̊͒̆̿̃͂̑́͑̈́̌͊̀̋͝"></h1>
         </div>
         <div v-else>
-          <h1 class="mb-5">Velkommen til Stand-up Sara!</h1>
+          <h1 class="mb-5">Velkommen til Stand-up Land!</h1>
         </div>
         <!-- Operator block -->
         <div
@@ -68,27 +68,45 @@
           >
             <h5>Hvem er med i dag?</h5>
             <div
-              v-if="!participants.length"
+              v-if="selectedParticipants.length > 0 && selectedParticipants.length === users.length"
               class="font-italic"
             >
               Alle er valgt.
             </div>
+            <div
+              v-if="!users.length"
+            >
+              Ingen brukere lagt til.
+            </div>
             <!-- Display available users to select -->
             <b-list-group
-              v-if="participants.length"
+              v-if="users.length"
               class="user-list overflow-y-scroll"
             >
               <b-list-group-item
-                v-if="participants.length"
+                v-if="users.length"
                 :disabled="loading"
-                @click="addAllUsers()"
+                class="d-flex"
               >
-                <div class="text-green">
+                <div
+                  @click="addAllUsers()"
+                  class="text-green"
+                >
                   Velg alle
                   <font-awesome-icon
                     icon="smile-beam"
                     class="ml-1"
                     spin
+                  />
+                </div>
+                <div
+                  @click="removeAllUsers()"
+                  class="text-red ml-auto"
+                >
+                  Fjern alle
+                  <font-awesome-icon
+                    icon="times"
+                    class="ml-1"
                   />
                 </div>
               </b-list-group-item>
@@ -110,7 +128,7 @@
                 :disabled="loading"
                 @click="displayCustom = !displayCustom"
               >
-                Egendefinert
+                Legg til bruker
               </b-btn>
               <b-input-group v-if="displayCustom" size="sm" class="text-right mt-2">
                 <b-input v-model="customName" placeholder="Navn..." :state="customName.length > 1">
@@ -155,7 +173,7 @@
               <b-list-group-item
                 v-for="(sp, si) in selectedParticipants"
                 :key="`selected-user-${si}`"
-                @click="removeUser(sp, si)"
+                @click="removeParticipatingUser(sp, si)"
               >
                 <div class="text-green">
                   <font-awesome-icon
@@ -202,15 +220,14 @@
 </template>
 <script>
 // @ is an alias to /src
-import Participants from '@/assets/users.json'
 import Sentences from '@/assets/sentences.json'
+import { mapGetters, mapActions } from 'vuex'
 import Operators from '@/assets/operators.json'
 export default {
   name: 'home',
   data () {
     return {
       appVersion: require('../../package.json').version,
-      participants: Participants,
       selectedParticipants: [],
       displayCustom: false,
       customName: '',
@@ -236,17 +253,23 @@ export default {
     }
   },
   created () {
-    window.responsiveVoice.enableWindowClickHook()
-    window.responsiveVoice.enableEstimationTimeout = false
+    if (window.responsiveVoice) {
+      window.responsiveVoice.enableWindowClickHook()
+      window.responsiveVoice.enableEstimationTimeout = false
+    }
   },
   mounted () {
     this.randomLoadingSentence()
   },
   computed: {
+    ...mapGetters([
+      'users'
+    ]),
     participantsSorted () {
       // Avoid some unexpected side-effects.
-      const temp = this.participants
-      return temp.sort((a, b) => a.localeCompare(b))
+      // const temp = this.users
+      return this.users
+      // return temp.sort((a, b) => a.toLowerCase(b))
     },
     selectedOperator () {
       if (this.operator) {
@@ -256,7 +279,7 @@ export default {
       }
     },
     originalParticipants () {
-      return Participants
+      return this.users
     },
     operatorName () {
       if (this.operator) {
@@ -266,13 +289,12 @@ export default {
       }
     }
   },
-  watch: {
-    // Look for changes in sentence, and speak them
-    sentence (d) {
-      // window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
-    }
-  },
   methods: {
+    ...mapActions([
+      'storeUser',
+      'removeAllUsers',
+      'removeUser'
+    ]),
     randomLoadingSentence () {
       const selectedIntro = this.fisherYates(this.introSentences)[0]
       this.operator = this.randomOperator(this.operators)
@@ -282,7 +304,7 @@ export default {
           const drive = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase()
           this.sentence = `Endelig! Nå eier jeg PC-en din. Sletter ${drive} kolon....vent litt...`
         } else {
-          this.sentence = `Sara er borte, så det er meg, ${this.operator.name}, som får herje!`
+          this.sentence = `Alle er borte, så det er meg, ${this.operator.name}, som får herje!`
           this.sentence += ` ${selectedIntro}`
         }
       } else {
@@ -311,28 +333,30 @@ export default {
         let ix = 0
         // Set Sara probability to 50%
         if (Number.parseFloat(seed) < 0.5) {
-          console.log('Sara is here!')
           ix = 0
         } else {
-          console.log('Sara is away, using other operator')
           ix = Math.floor(Math.random() * input.length)
         }
         return input[ix]
       }
     },
     speak () {
-      window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      if (window.responsiveVoice) {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      }
     },
     addCustomUser () {
       this.error = null
-      if (!this.participants.some(e => e.trim().toLowerCase() === this.customName.trim().toLowerCase())) {
-        this.participants.push(this.customName)
+      if (!this.users.some(e => e.trim().toLowerCase() === this.customName.trim().toLowerCase())) {
+        // Add only new users that don't already exist in user pool
+        this.storeUser(this.customName)
       } else {
         this.error = 'Navnet finnes allerede.'
       }
     },
     addUser (user, index) {
-      this.participants.splice(index, 1)
+      // this.participants.splice(index, 1)
+      // this.removeUser(index)
       this.selectedParticipants.push(user)
       this.sentence = user + ' er lagt til.'
       let addedSentence = ''
@@ -345,8 +369,9 @@ export default {
       this.speak()
     },
     addAllUsers () {
-      this.selectedParticipants = this.participants.concat(this.selectedParticipants)
-      this.participants = []
+      this.selectedParticipants = this.users.concat(this.selectedParticipants)
+      // this.removeAllUsers()
+      // this.participants = []
       this.sentence = 'Søkke ta, hele oppdrettsanlegget er med!'
       this.speak()
     },
@@ -354,9 +379,10 @@ export default {
       // TODO: Invalid when max is 1
       return ~~(Math.random() * max) + 1
     },
-    removeUser (user, index) {
+    removeParticipatingUser (user, index) {
       this.selectedParticipants.splice(index, 1)
-      this.participants.push(user)
+      // this.storeUser(user)
+      // this.participants.push(user)
       if (this.operator.name.toLowerCase() === 'shadow') {
         this.sentence = `${user} var ikke så interessant å hacke likevel.`
       } else {
@@ -365,7 +391,7 @@ export default {
       this.speak()
     },
     removeAllUsers () {
-      this.participants = this.selectedParticipants.concat(this.participants)
+      // this.users = this.selectedParticipants.concat(this.participants)
       this.selectedParticipants = []
       this.sentence = 'Hæ, skal ingen være med?'
       this.speak()
