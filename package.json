@@ -1,6 +1,6 @@
 {
-  "name": "standup-sara",
-  "version": "1.0.0",
+  "name": "standup-land",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

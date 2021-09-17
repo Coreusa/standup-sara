@@ -18,23 +18,23 @@ body {
   background-size: 80%;
 }
 .operator-sara {
-  background: url('/static/standup-sara.png') bottom right no-repeat transparent;
+  /* background: url('/static/standup-sara.png') bottom right no-repeat transparent; */
 }
 
 .operator-sandra {
-  background: url('/static/standup-sandra.png') bottom right no-repeat transparent;
+  /* background: url('/static/standup-sandra.png') bottom right no-repeat transparent; */
 }
 
 .operator-elise {
-  background: url('/static/standup-elise.png') bottom right no-repeat transparent;
+  /* background: url('/static/standup-elise.png') bottom right no-repeat transparent; */
 }
 
 .operator-barry {
-  background: url('/static/standup-barry.png') bottom right no-repeat transparent;
+  /* background: url('/static/standup-barry.png') bottom right no-repeat transparent; */
 }
 
 .operator-stein {
-  background: url('/static/standup-stein.png') bottom right no-repeat transparent;
+  /* background: url('/static/standup-stein.png') bottom right no-repeat transparent; */
 }
 
 .operator-business {

@@ -43,7 +43,6 @@ export default new Vuex.Store({
     deleteAllUsers (state) {
       console.log('Removing all users')
       state.users = []
-      console.log(state.users)
     }
   },
   getters: {
