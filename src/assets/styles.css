@@ -13,28 +13,20 @@ body {
   background-color: #111;
 }
 
-.operator {
-  background-position: 50% 20%;
-  background-size: 80%;
-}
-.operator-sara {
-  /* background: url('/static/standup-sara.png') bottom right no-repeat transparent; */
+.operator-chicken {
+  background: url('/static/chicken-thonk.png') bottom right no-repeat transparent;
 }
 
-.operator-sandra {
-  /* background: url('/static/standup-sandra.png') bottom right no-repeat transparent; */
+.operator-blob {
+  background: url('/static/chonky-blob.png') bottom right no-repeat transparent;
 }
 
-.operator-elise {
-  /* background: url('/static/standup-elise.png') bottom right no-repeat transparent; */
+.operator-sonja {
+  background: url('/static/sonja.png') bottom right no-repeat transparent;
 }
 
-.operator-barry {
-  /* background: url('/static/standup-barry.png') bottom right no-repeat transparent; */
-}
-
-.operator-stein {
-  /* background: url('/static/standup-stein.png') bottom right no-repeat transparent; */
+.operator-flynn {
+  background: url('/static/flynn.png') bottom right no-repeat transparent;
 }
 
 .operator-business {
@@ -60,14 +52,16 @@ body {
 .operator {
   width: 100%;
   height: 400px;
+  bottom: 0;
   z-index: 0;
-  background-size: 50%;
+  background-size: 30%;
 }
 
 .bottom-right {
   bottom: 0;
   right: 0;
 }
+
 .top-right {
   top: 0;
   right: 0;
@@ -106,11 +100,6 @@ body {
   border-color: #fff transparent;
   display: block;
   width: 0;
-}
-
-.sara-dialogue {
-  bottom: 32vh;
-  right: -3%;
 }
 
 .app-version {

@@ -13,14 +13,17 @@
         lg="6"
         class="align-content-center justify-items-center mx-auto"
       >
-        <div
-          v-if="operator && operator.name.toLowerCase() === 'shadow'"
-          class="glitch-wrapper"
-        >
-          <h1 class="glitch mb-5" data-text="̗̙̤̞͉̞̰̱̦̠͖̱̯̅̈́͐̈́̓̂̆̀̓͘̚ͅŞ̵̖̜̥̯͋ͅḩ̸̝̺̙̻͙͖͉͍̈́̋͛͌͊͂̊͆͗̅̊à̵̡̛͉̼͚̩̜̻̯͇͓͉͙̖̉̎̔̽̈͗͐̓̊͝͝͝͠ͅd̶̛̘̝͇̺̲͕͎͕͉̩̠̪̳̹͈̱͗̃̑͋͑̅͝o̵̡͈͚̟͕͉̝̰̬̖͗̇̓̔̔̋̽̂ͅw̴̙̤̱̜̣͙̥̗̞̙̜̗̞͒̀͜ͅ ̸̪̉e̸̱͖͖̼̟̤̊͋̆̃̑̃̓͒̃͛̒͑̈̚͝͠ȑ̴̢̜͓̦̇͑̓̀͋̃̄͝ ̸̡̢̦̱͎̪̫̞̤̠̹͚̣̞̗̔̒̚̚h̷̠̝̹̙͚̘̣̓̎̈́̓̏̔̄̆̐͘ͅḙ̸̡̛̭̩͔͓̹̮̳̅̑̓̓̋̿̑̓͒͘͝͝r̸̠̗͉̦̱̊͒̆̿̃͂̑́͑̈́̌͊̀̋͝"></h1>
-        </div>
-        <div v-else>
-          <h1 class="mb-5">Velkommen til Stand-up Land!</h1>
+        <!-- Heading -->
+        <div class="bg-light p-3 rounded mb-3">
+          <div
+            v-if="operator && operator.name.toLowerCase() === 'shadow'"
+            class="glitch-wrapper"
+          >
+            <h1 class="glitch" data-text="̗̙̤̞͉̞̰̱̦̠͖̱̯̅̈́͐̈́̓̂̆̀̓͘̚ͅŞ̵̖̜̥̯͋ͅḩ̸̝̺̙̻͙͖͉͍̈́̋͛͌͊͂̊͆͗̅̊à̵̡̛͉̼͚̩̜̻̯͇͓͉͙̖̉̎̔̽̈͗͐̓̊͝͝͝͠ͅd̶̛̘̝͇̺̲͕͎͕͉̩̠̪̳̹͈̱͗̃̑͋͑̅͝o̵̡͈͚̟͕͉̝̰̬̖͗̇̓̔̔̋̽̂ͅw̴̙̤̱̜̣͙̥̗̞̙̜̗̞͒̀͜ͅ ̸̪̉e̸̱͖͖̼̟̤̊͋̆̃̑̃̓͒̃͛̒͑̈̚͝͠ȑ̴̢̜͓̦̇͑̓̀͋̃̄͝ ̸̡̢̦̱͎̪̫̞̤̠̹͚̣̞̗̔̒̚̚h̷̠̝̹̙͚̘̣̓̎̈́̓̏̔̄̆̐͘ͅḙ̸̡̛̭̩͔͓̹̮̳̅̑̓̓̋̿̑̓͒͘͝͝r̸̠̗͉̦̱̊͒̆̿̃͂̑́͑̈́̌͊̀̋͝"></h1>
+          </div>
+          <div v-else>
+            <h1>Velkommen til Stand-up Land!</h1>
+          </div>
         </div>
         <!-- Operator block -->
         <div
@@ -43,36 +46,39 @@
             </div>
           </b-col>
         </div>
-        <div class="d-flex justify-content-between mt-2">
+        <div class="d-flex justify-content-between align-items-center bg-light rounded mb-2 p-2">
           <b-btn
             @click="randomLoadingSentence()"
-            variant="light"
+            variant="dark"
             :disabled="loading"
+            size="sm"
             title="Ny agent"
             v-b-tooltip.hover
-            class="px-3 py-2"
           >
             <font-awesome-icon
               icon="magic"
               class="mr-2"
             >
             </font-awesome-icon>
-            Tilfeldig agent
+            Ny agent
           </b-btn>
+          <b-form-checkbox
+            v-model="modifiersEnabled"
+            switch
+          >
+            Jeg prøver lykken
+          </b-form-checkbox>
           <small>Versjon: {{ appVersion }}</small>
         </div>
-        <b-row>
+        <b-row
+          no-gutters
+          class="bg-light px-3 pb-2 rounded"
+        >
           <b-col
             v-if="!loading"
-            class="text-light mt-4"
+            class="mr-1 mt-4"
           >
             <h5>Hvem er med i dag?</h5>
-            <div
-              v-if="selectedParticipants.length > 0 && selectedParticipants.length === users.length"
-              class="font-italic"
-            >
-              Alle er valgt.
-            </div>
             <div
               v-if="!users.length"
             >
@@ -89,6 +95,7 @@
                 class="d-flex"
               >
                 <div
+                  v-if="participantsSorted.length !== selectedParticipants.length"
                   @click="addAllUsers()"
                   class="text-green"
                 >
@@ -100,8 +107,9 @@
                   />
                 </div>
                 <div
+                  v-if="selectedParticipants.length"
                   @click="removeAllUsers()"
-                  class="text-red ml-auto"
+                  class="text-red"
                 >
                   Fjern alle
                   <font-awesome-icon
@@ -147,12 +155,15 @@
           <!-- Selected users block -->
           <b-col
             v-if="!loading"
-            class="text-light mt-4"
+            class="mt-4"
           >
             <h5
               v-if="selectedParticipants.length"
+              :class="[{
+                'font-italic': selectedParticipants.length === users.length
+              }]"
             >
-              {{ `${selectedParticipants.length} valgt`}}
+              {{ selectedParticipants.length > 0 && selectedParticipants.length === users.length ? 'Alle er valgt' : `${selectedParticipants.length} valgt`}}
             </h5>
             <b-list-group
               v-if="selectedParticipants.length"
@@ -223,6 +234,7 @@
 import Sentences from '@/assets/sentences.json'
 import { mapGetters, mapActions } from 'vuex'
 import Operators from '@/assets/operators.json'
+import Functions from '@/core/Functions'
 export default {
   name: 'home',
   data () {
@@ -233,6 +245,7 @@ export default {
       customName: '',
       error: null,
       timeoutId: null,
+      modifiersEnabled: false,
       sentence: 'Hei, alle sammen og velkommen til stand up!',
       introSentences: Sentences.intro,
       loadingSentences: Sentences.loading,
@@ -267,9 +280,7 @@ export default {
     ]),
     participantsSorted () {
       // Avoid some unexpected side-effects.
-      // const temp = this.users
       return this.users
-      // return temp.sort((a, b) => a.toLowerCase(b))
     },
     selectedOperator () {
       if (this.operator) {
@@ -296,10 +307,10 @@ export default {
       'removeUser'
     ]),
     randomLoadingSentence () {
-      const selectedIntro = this.fisherYates(this.introSentences)[0]
-      this.operator = this.randomOperator(this.operators)
+      const selectedIntro = Functions.shuffle(this.introSentences)[0]
+      this.operator = Functions.randomEntry(this.operators)
       const operatorName = this.operator.name.toLowerCase()
-      if (operatorName !== 'sara') {
+      if (operatorName !== 'sonja') {
         if (operatorName === 'shadow') {
           const drive = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 1).toUpperCase()
           this.sentence = `Endelig! Nå eier jeg PC-en din. Sletter ${drive} kolon....vent litt...`
@@ -315,30 +326,6 @@ export default {
       window.setTimeout(() => {
         window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
       }, 1200)
-    },
-    fisherYates (input) {
-      let a = input
-      var aLength = a.length
-      for (var i = aLength - 1; i >= 0; i--) {
-        var randomIndex = Math.floor(Math.random() * (i + 1))
-        var itemAtIndex = a[randomIndex]
-        a[randomIndex] = a[i]
-        a[i] = itemAtIndex
-      }
-      return a
-    },
-    randomOperator (input) {
-      if (input) {
-        const seed = Math.random()
-        let ix = 0
-        // Set Sara probability to 50%
-        if (Number.parseFloat(seed) < 0.5) {
-          ix = 0
-        } else {
-          ix = Math.floor(Math.random() * input.length)
-        }
-        return input[ix]
-      }
     },
     speak () {
       if (window.responsiveVoice) {
@@ -363,7 +350,7 @@ export default {
       if (this.operator.name.toLowerCase() === 'shadow') {
         addedSentence = `Hacker ${user}. Skaaaal vi se. Der ja! Hacket og Eid! Lett.`
       } else {
-        addedSentence = this.fisherYates(this.addedSentences)[0].replace(/{name}/gi, user)
+        addedSentence = Functions.shuffle(this.addedSentences)[0].replace(/{name}/gi, user)
       }
       this.sentence = addedSentence
       this.speak()
@@ -374,10 +361,6 @@ export default {
       // this.participants = []
       this.sentence = 'Søkke ta, hele oppdrettsanlegget er med!'
       this.speak()
-    },
-    random (max = 10) {
-      // TODO: Invalid when max is 1
-      return ~~(Math.random() * max) + 1
     },
     removeParticipatingUser (user, index) {
       this.selectedParticipants.splice(index, 1)
@@ -399,13 +382,13 @@ export default {
     selectRandom () {
       this.loading = true
       // Determine direction and order of users
-      const turnType = this.fisherYates(this.turnTypes)[0]
-      const shuffled = this.fisherYates(this.selectedParticipants)
-      const modifiersEnabled = (Math.random() * 100)
+      const turnType = Functions.shuffle(this.turnTypes)[0]
+      const shuffled = Functions.shuffle(this.selectedParticipants)
+      // const modifiersEnabled = (Math.random() * 100)
       let sentence = ''
       switch (turnType) {
         case 'direction':
-          const direction = (this.random(2) % 2) ? 'med klokken' : 'mot klokken'
+          const direction = (Functions.randomNumber(2) % 2) ? 'med klokken' : 'mot klokken'
           sentence = `I dag tror jeg vi starter med ${shuffled[0]} og går ${direction}.`
           break
         case 'chosen':
@@ -421,8 +404,8 @@ export default {
           break
       }
 
-      if (modifiersEnabled > 60) {
-        let modifier = this.fisherYates(this.modifiers)[0]
+      if (this.modifiersEnabled === true) {
+        let modifier = Functions.shuffle(this.modifiers)[0]
         sentence += `Vi gjør det litt annerledes i dag, nemlig ${modifier.type}! ${modifier.text}!`
       }
       const onLoadingSentenceCompleted = () => {
@@ -433,7 +416,7 @@ export default {
         }, 1000)
       }
 
-      let selectedLoadingSentence = this.fisherYates(this.loadingSentences)[0]
+      let selectedLoadingSentence = Functions.shuffle(this.loadingSentences)[0]
       this.sentence = selectedLoadingSentence
       try {
         window.responsiveVoice.speak(this.sentence, this.operator.voice, {
