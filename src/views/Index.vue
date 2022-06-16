@@ -9,8 +9,8 @@
     >
       <b-col
         sm="12"
-        md="8"
-        lg="6"
+        md="10"
+        lg="8"
         class="align-content-center justify-items-center mx-auto"
       >
         <!-- Heading -->
@@ -71,11 +71,11 @@
           <small>Versjon: {{ appVersion }}</small>
         </div>
         <b-row
+          v-if="!loading"
           no-gutters
           class="bg-light px-3 pb-2 rounded"
         >
           <b-col
-            v-if="!loading"
             class="mr-1 mt-4"
           >
             <h5>Hvem er med i dag?</h5>
@@ -92,7 +92,7 @@
               <b-list-group-item
                 v-if="users.length"
                 :disabled="loading"
-                class="d-flex"
+                class="d-flex justify-content-between"
               >
                 <div
                   v-if="participantsSorted.length !== selectedParticipants.length"
@@ -103,7 +103,6 @@
                   <font-awesome-icon
                     icon="smile-beam"
                     class="ml-1"
-                    spin
                   />
                 </div>
                 <div
@@ -200,29 +199,40 @@
         <!-- Find user sequence block -->
         <b-col
           sm="12"
-          class="text-center mt-3"
+          class="d-flex align-items-center justify-content-between mt-3"
         >
-          <div
-            v-if="loading"
-          >
-            <span class="font-italic">
-              {{ `${operator.name} tenker...` }}
-            </span>
-            <span class="spin">🤪</span>
-          </div>
           <b-btn
             v-if="selectedParticipants.length > 1"
-            class="mt-3"
             variant="success"
-            size="lg"
+            :class="[{
+              'w-100': !loading
+            }]"
             :disabled="loading === true"
             @click="selectRandom()"
           >
-            {{ operator.name.toLowerCase() === 'shadow' ? 'Hack!' : `Hvem starter, ${operator.name}?` }}
-            <font-awesome-icon
-              icon="magic"
-              spin
-            />
+            <div
+              v-if="loading"
+            >
+              {{ `${operator.name} tenker...` }}
+              <font-awesome-icon
+                :icon="['fas', 'smile-wink']"
+                spin
+              />
+            </div>
+            <div v-else>
+              {{ operator.name.toLowerCase() === 'shadow' ? 'Hack!' : `Hvem starter, ${operator.name}?` }}
+              <font-awesome-icon
+                icon="magic"
+                spin
+              />
+            </div>
+          </b-btn>
+          <b-btn
+            v-if="loading"
+            variant="warning"
+            @click="cancelVoice()"
+          >
+            Avbryt!
           </b-btn>
         </b-col>
       </b-col>
@@ -247,6 +257,8 @@ export default {
       timeoutId: null,
       modifiersEnabled: false,
       sentence: 'Hei, alle sammen og velkommen til stand up!',
+      displayOrder: false,
+      timer: null,
       introSentences: Sentences.intro,
       loadingSentences: Sentences.loading,
       addedSentences: Sentences.added,
@@ -321,15 +333,17 @@ export default {
       } else {
         this.sentence = selectedIntro
       }
-      // Cancel any playing audio
-      // window.responsiveVoice.cancel()
-      window.setTimeout(() => {
-        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+      this.timer = setTimeout(() => {
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, {
+          rate: this.voiceRate, pitch: this.operator.pitch
+        })
       }, 1200)
     },
     speak () {
       if (window.responsiveVoice) {
-        window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
+        window.responsiveVoice.speak(this.sentence, this.operator.voice, {
+          rate: this.voiceRate, pitch: this.operator.pitch
+        })
       }
     },
     addCustomUser () {
@@ -379,43 +393,58 @@ export default {
       this.sentence = 'Hæ, skal ingen være med?'
       this.speak()
     },
-    selectRandom () {
-      this.loading = true
+    cancelVoice () {
+      console.dir('cancel called')
+      this.loading = false
+      clearTimeout(this.timer)
+      window.responsiveVoice.cancel()
+      this.sentence = this.createSentence()
+    },
+    createSentence () {
       // Determine direction and order of users
       const turnType = Functions.shuffle(this.turnTypes)[0]
       const shuffled = Functions.shuffle(this.selectedParticipants)
-      // const modifiersEnabled = (Math.random() * 100)
       let sentence = ''
-      switch (turnType) {
-        case 'direction':
-          const direction = (Functions.randomNumber(2) % 2) ? 'med klokken' : 'mot klokken'
-          sentence = `I dag tror jeg vi starter med ${shuffled[0]} og går ${direction}.`
-          break
-        case 'chosen':
-          sentence = `Allright! I dag bestemmer jeg rekkefølgen! Hva med ${shuffled.join(' så ')}?`
-          break
-        case 'random':
-          sentence = `Bananas! Denne gangen starter vi med ${shuffled[0]} også velger ${shuffled[1]} hvem som er neste, hver gang! Spinnvilt, spør du meg.`
-          break
-        case 'backwards':
-          let reversed = shuffled
-          reversed = reversed.reverse()
-          sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, jaja.`
-          break
-      }
 
-      if (this.modifiersEnabled === true) {
-        let modifier = Functions.shuffle(this.modifiers)[0]
-        sentence += `Vi gjør det litt annerledes i dag, nemlig ${modifier.type}! ${modifier.text}!`
+      if (turnType && shuffled.length) {
+        switch (turnType) {
+          case 'direction':
+            const direction = (Functions.randomNumber(2) % 2) ? 'med klokken' : 'mot klokken'
+            sentence = `I dag tror jeg vi starter med ${shuffled[0]} og går ${direction}.`
+            break
+          case 'chosen':
+            sentence = `Allright! I dag bestemmer jeg rekkefølgen! Hva med ${shuffled.join(' så ')}?`
+            break
+          case 'random':
+            sentence = `Bananas! Denne gangen starter vi med ${shuffled[0]} også velger ${shuffled[1]} hvem som er neste, hver gang! Spinnvilt, spør du meg.`
+            break
+          case 'backwards':
+            let reversed = shuffled
+            reversed = reversed.reverse()
+            sentence = `Denne gangen går vi bakover! Det vil si ${reversed.join(' så ')}. Litt rart, jaja.`
+            break
+        }
+
+        if (this.modifiersEnabled === true) {
+          let modifier = Functions.shuffle(this.modifiers)[0]
+          sentence += ` Vi gjør det litt annerledes i dag, nemlig ${modifier.type}! ${modifier.text}!`
+        }
+        return sentence
+      } else {
+        return 'Det mangler deltagere for at jeg skal kunne si noe fornuftig.'
       }
+    },
+    selectRandom () {
+      this.loading = true
       const onLoadingSentenceCompleted = () => {
-        setTimeout(() => {
-          this.sentence = sentence
+        this.timer = setTimeout(() => {
+          this.sentence = this.createSentence()
           window.responsiveVoice.speak(this.sentence, this.operator.voice, { rate: this.voiceRate, pitch: this.operator.pitch })
           this.loading = false
         }, 1000)
       }
 
+      // Setup loading sentences
       let selectedLoadingSentence = Functions.shuffle(this.loadingSentences)[0]
       this.sentence = selectedLoadingSentence
       try {
@@ -424,8 +453,7 @@ export default {
           pitch: this.operator.pitch,
           onend: onLoadingSentenceCompleted,
           onerror: () => {
-            this.loading = false
-            this.sentence = sentence
+            this.cancelVoice()
           }
         })
       } catch (e) {
@@ -436,11 +464,6 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.spin {
-  animation: 1.2s rotation infinite linear;
-  position: absolute;
-}
-
 .hero {
   height: 250px;
 }
@@ -469,15 +492,5 @@ export default {
 .user-list > div:hover {
   cursor: pointer;
   background: #eee;
-}
-
-@keyframes rotation {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(359deg);
-  }
 }
 </style>
